@@ -1208,37 +1208,38 @@
         });
 
         async function docFileExcelDiaDanh() {
-            try {
-                const response = await fetch('Danh-muc-Phuong-xa.xlsx');
-                const arrayBuffer = await response.arrayBuffer();
+    		try {
+        	const response = await fetch('Danh-muc-Phuong-xa.xlsx');
+        	const arrayBuffer = await response.arrayBuffer();
+        
+        	const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        	const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        	const jsonData = XLSX.utils.sheet_to_json(worksheet);
+        
+        	jsonData.forEach(row => {
+            // Đã sửa 'Tên tỉnh/TP mới' thành 'Tên tỉnh/mới' để khớp với file Excel
+            	const tinh = row['Tên tỉnh/mới'];
+            	const xa = row['Tên Phường/Xã mới'];
+            
+            	if (tinh && xa) {
+                	const tinhTrim = String(tinh).trim();
+                	const xaTrim = String(xa).trim();
                 
-                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                jsonData.forEach(row => {
-                    const tinh = row['Tên tỉnh/TP mới'];
-                    const xa = row['Tên Phường/Xã mới'];
-                    
-                    if (tinh && xa) {
-                        const tinhTrim = String(tinh).trim();
-                        const xaTrim = String(xa).trim();
-                        
-                        if (!diaGioiData[tinhTrim]) diaGioiData[tinhTrim] = [];
-                        if (!diaGioiData[tinhTrim].includes(xaTrim)) {
-                            diaGioiData[tinhTrim].push(xaTrim);
-                        }
-                    }
-                });
-                
-                doDuLieuTinh('qqTinh');
-                doDuLieuTinh('noTinh');
-                
-            } catch (error) {
-                console.error("Lỗi đọc file Excel:", error);
-                alert("Lỗi tải danh mục Tỉnh/Xã. Hãy đảm bảo bạn đang chạy file HTML thông qua một Local Server (như Live Server trên VS Code).");
-            }
-        }
+                	if (!diaGioiData[tinhTrim]) diaGioiData[tinhTrim] = [];
+                	if (!diaGioiData[tinhTrim].includes(xaTrim)) {
+                    	diaGioiData[tinhTrim].push(xaTrim);
+                	}
+            	}
+        	});
+        
+        	doDuLieuTinh('qqTinh');
+        	doDuLieuTinh('noTinh');
+        
+    	} catch (error) {
+        	console.error("Lỗi đọc file Excel:", error);
+        	alert("Lỗi tải danh mục Tỉnh/Xã. Hãy đảm bảo bạn đang chạy file HTML thông qua một Local Server (như Live Server trên VS Code).");
+    	}
+	}
 
         function doDuLieuTinh(selectId) {
             const select = $('#' + selectId);

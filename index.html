@@ -1243,41 +1243,43 @@
 
         function doDuLieuTinh(selectId) {
             const select = $('#' + selectId);
-            select.empty().append('<option value="">-- Chọn Tỉnh/Thành phố --</option>');
-            
-            Object.keys(diaGioiData).sort().forEach(tinh => {
-                select.append(new Option(tinh, tinh, false, false));
-            });
-            select.trigger('change.select2');
-        }
+    		select.empty().append('<option value="">-- Chọn Tỉnh/Thành phố --</option>');
+    
+    		// Sử dụng localeCompare('vi') để sắp xếp đúng bảng chữ cái tiếng Việt
+    		Object.keys(diaGioiData).sort((a, b) => a.localeCompare(b, 'vi')).forEach(tinh => {
+        		select.append(new Option(tinh, tinh, false, false));
+    		});
+    		select.trigger('change.select2');
+		}
 
         function batSuKienThayDoi(loai) {
-            const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh';
-            const xaId = loai === 'qq' ? '#qqXa' : '#noXa';
-            const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
-            
-            $(tinhId).on('change', function() {
-                const selectedTinh = $(this).val();
-                const xaSelect = $(xaId);
-                
-                xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
-                
-                if (selectedTinh && diaGioiData[selectedTinh]) {
-                    xaSelect.prop('disabled', false); 
-                    diaGioiData[selectedTinh].sort().forEach(xa => {
-                        xaSelect.append(new Option(xa, xa, false, false));
-                    });
-                } else {
-                    xaSelect.prop('disabled', true);
-                }
-                xaSelect.trigger('change.select2');
-                capNhatInputAn(tinhId, xaId, hiddenId);
-            });
-            
-            $(xaId).on('change', function() {
-                capNhatInputAn(tinhId, xaId, hiddenId);
-            });
-        }
+    		const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh';
+    		const xaId = loai === 'qq' ? '#qqXa' : '#noXa';
+    		const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
+    
+    		$(tinhId).on('change', function() {
+        		const selectedTinh = $(this).val();
+        		const xaSelect = $(xaId);
+        
+        		xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
+        
+        		if (selectedTinh && diaGioiData[selectedTinh]) {
+            		xaSelect.prop('disabled', false); 
+            		// Sử dụng localeCompare('vi') để sắp xếp đúng bảng chữ cái tiếng Việt
+            		diaGioiData[selectedTinh].sort((a, b) => a.localeCompare(b, 'vi')).forEach(xa => {
+                		xaSelect.append(new Option(xa, xa, false, false));
+            		});
+        		} else {
+            		xaSelect.prop('disabled', true);
+        		}
+        		xaSelect.trigger('change.select2');
+        		capNhatInputAn(tinhId, xaId, hiddenId);
+    		});
+    
+    		$(xaId).on('change', function() {
+        		capNhatInputAn(tinhId, xaId, hiddenId);
+    		});
+		}
 
         function capNhatInputAn(tinhId, xaId, hiddenId) {
             const tinhVal = $(tinhId).val();

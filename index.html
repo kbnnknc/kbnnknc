@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ thống Quản lý Kỷ niệm chương</title>
+    
     <!-- Thư viện xử lý xuất file Word -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.37.11/docxtemplater.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.4/dist/pizzip-utils.js"></script>
+    
+    <!-- Thư viện JQuery và Select2 cho hộp chọn tìm kiếm -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    
+    <!-- Thư viện đọc file Excel trực tiếp trên trình duyệt -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <style>
         /* =========================================================
            1. THIẾT KẾ GIAO DIỆN CHUNG
            ========================================================= */
         body {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #f2f5f9; /* Màu nền xám xanh nhạt */
+            background-color: #f2f5f9;
             margin: 0;
             padding: 0;
             color: #333;
@@ -28,7 +38,7 @@
             padding: 15px 30px;
             display: flex;
             align-items: center;
-            border-bottom: 3px solid #005b9f; /* Xanh dương đậm GDT */
+            border-bottom: 3px solid #005b9f;
         }
         .header-logo {
             font-weight: bold;
@@ -41,7 +51,6 @@
             font-weight: bold;
             color: #005b9f;
             text-transform: uppercase;
-            text-aglin: right
         }
 
         /* --- Thanh Menu Tabs --- */
@@ -103,9 +112,8 @@
         }
         
         /* =========================================================
-           2. BÊ NGUYÊN CSS GỐC CỦA CÁC PHẦN
+           2. CSS GỐC VÀ TÙY CHỈNH SELECT2
            ========================================================= */
-        /* --- Phần I CSS --- */
         .form-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
         .form-group { flex: 1; min-width: 200px; display: flex; flex-direction: column; }
         .form-group label { margin-bottom: 5px; font-weight: bold; color: #333; }
@@ -115,9 +123,23 @@
         }
         input:focus, select:focus, textarea:focus { border-color: #005b9f; outline: none; }
         .text-danger { color: red; margin-left: 3px; }
-        .error-message { color: red; font-style: italic; font-size: 13px; margin-top: 5px; display: none; }
         
-        /* --- Phần II & IV Bảng CSS --- */
+        /* Tùy chỉnh Select2 khớp với input gốc */
+        .select2-container .select2-selection--single {
+            height: 35px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 33px;
+            font-size: 14px;
+            padding-left: 8px;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 33px;
+        }
+
+        /* --- CSS Bảng & Các thành phần khác --- */
         .instruction-note {
             background-color: #e3f2fd; color: #0d47a1; padding: 15px 20px;
             border-left: 6px solid #1e88e5; border-radius: 4px; margin-bottom: 25px;
@@ -136,14 +158,11 @@
         .total-highlight { font-weight: bold; color: #005b9f; }
         .result-cell { background-color: #fdfdfe; color: #005b9f; font-weight: bold; }
 
-        /* Nút thao tác gốc */
         .btn-add { background-color: #28a745; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 10px;}
         .btn-add:hover { background-color: #218838; }
         .btn-remove-line { background-color: #dc3545; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
         .btn-remove-line:hover { background-color: #c82333; }
-        .btn-remove { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-
-        /* --- Phần III CSS --- */
+        
         .grand-total-box {
             background-color: #e3f2fd; color: #0d47a1; padding: 10px 15px;
             border-left: 5px solid #1e88e5; border-radius: 4px; font-size: 15px;
@@ -155,14 +174,12 @@
         .time-row input[type="number"] { width: 100px; }
         .so-nam-row { width: 80px; font-weight: bold; color: #005b9f; text-align: right; }
 
-        /* --- Phần IV CSS Form Kỷ luật --- */
         .ky-luat-status { font-size: 16px; font-weight: bold; color: #333; margin-bottom: 10px; }
         .ky-luat-card { background-color: #fcf8e3; border: 1px solid #faebcc; padding: 20px; border-radius: 6px; margin-bottom: 15px; position: relative; }
         .ky-luat-card label { font-weight: bold; color: #555; display: block; margin-bottom: 5px; margin-top: 10px; font-size: 14px;}
         .kl-flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
         .kl-flex-item { flex: 1; min-width: 150px; }
         
-        /* Cam kết & Phê duyệt */
         .commitment-box { background: #fff3cd; border: 1px solid #ffeeba; padding: 20px; border-radius: 6px; margin-bottom: 20px; }
         .commitment-box label { display: flex; align-items: center; font-weight: normal; font-size: 14px; margin-bottom: 10px; cursor: pointer;}
         .commitment-box input { margin-right: 10px; width: 18px; height: 18px;}
@@ -172,11 +189,11 @@
            3. FOOTER
            ========================================================= */
         .footer-gdt {
-            background-color: #e6f0fa; /* Nền xanh nhạt */
+            background-color: #e6f0fa;
             background-image: radial-gradient(#cce0f5 10%, transparent 11%), radial-gradient(#cce0f5 10%, transparent 11%);
             background-size: 20px 20px;
-            background-position: 0 0, 10px 10px; /* Tạo họa tiết chấm nền nhẹ giống trống đồng mờ */
-            border-top: 3px solid #ffcc00; /* Vàng GDT */
+            background-position: 0 0, 10px 10px;
+            border-top: 3px solid #ffcc00;
             padding: 30px 40px;
             display: flex;
             align-items: flex-start;
@@ -211,8 +228,8 @@
 
     <!-- PHẦN HEADER -->
     <div class="header">
-        <div class="header-logo">
-            <img src="https://via.placeholder.com/50x50.png?text=LOGO" alt="Logo" style="vertical-align: middle; margin-right: 10px; border-radius: 50%;">
+        <div class="header-logo" style="display: flex; align-items: center; cursor: pointer;" onclick="veTrangChu()" title="Về trang chủ">
+            <img src="Logo-1.png" alt="Logo KBNN" style="height: 45px; margin-right: 5px;">
             KHO BẠC NHÀ NƯỚC
         </div>
         <div class="header-title">Hệ thống quản lý Kỷ niệm chương "Vì sự nghiệp Tài chính Việt Nam"</div>
@@ -229,12 +246,11 @@
 
     <!-- NỘI DUNG TABS -->
     <div id="TabHome" class="tab-content"><div class="form-container-part"><h2>Dữ liệu thống kê</h2><p>Dữ liệu thống kê sẽ hiện ở đây.</p></div></div>
-    
     <div id="TabDonVi" class="tab-content"><div class="form-container-part"><h2>Đơn vị gửi hồ sơ</h2></div></div>
     <div id="TabQuanTri" class="tab-content"><div class="form-container-part"><h2>Quản trị đơn vị</h2></div></div>
     <div id="TabTaiLieu" class="tab-content"><div class="form-container-part"><h2>Tài liệu hệ thống</h2></div></div>
 
-    <!-- TAB CHÍNH: LẬP BÁO CÁO (Gộp 4 phần) -->
+    <!-- TAB CHÍNH: LẬP BÁO CÁO -->
     <div id="TabLapBaoCao" class="tab-content" style="display: block;">
         
         <!-- PHẦN I -->
@@ -249,7 +265,7 @@
                 <div class="form-row">
                     <div class="form-group" style="flex: 2;">
                         <label>Họ và tên:<span class="text-danger">*</span></label>
-                        <input type="text" id="hoTen" class="required-field" placeholder="NGUYỄN VĂN A" oninput="this.value = this.value.toUpperCase()">
+                        <input type="text" id="hoTen" class="required-field" placeholder="..." oninput="this.value = this.value.toUpperCase()">
                     </div>
                     <div class="form-group">
                         <label>Giới tính:<span class="text-danger">*</span></label>
@@ -268,31 +284,46 @@
                         <input type="text" id="danToc" placeholder="..." class="required-field">
                     </div>
                 </div>
+
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>Quê quán:<span class="text-danger">*</span></label>
-                        <input type="text" id="queQuan" placeholder="Xã/phường/đặc khu, Tỉnh/Thành phố" class="required-field">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Nơi ở hiện nay:<span class="text-danger">*</span></label>
-                        <input type="text" id="noiO" placeholder="Xã/phường/đặc khu, Tỉnh/Thành phố" class="required-field">
-                    </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Cá nhân công tác tại:<span class="text-danger">*</span></label>
-                        <select id="noiCongTac" class="required-field" onchange="thayDoiNoiCongTac()">
-                            <option value="">-- Chọn đơn vị --</option><option value="CQ">Kho bạc Nhà nước</option><option value="KV">Kho bạc Nhà nước Khu vực</option>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Tỉnh/Thành phố trực thuộc TƯ (Quê quán):<span class="text-danger">*</span></label>
+                        <select id="qqTinh" class="select-search" style="width: 100%;">
+                            <option value="">-- Chọn Tỉnh/Thành phố --</option>
                         </select>
                     </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Xã/Phường/Đặc khu (Quê quán):<span class="text-danger">*</span></label>
+                        <select id="qqXa" class="select-search" style="width: 100%;" disabled>
+                            <option value="">-- Chọn Xã/Phường/Đặc khu --</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="queQuan" class="required-field" value="">
                 </div>
-                <div class="form-row">        
-                    <div class="form-group" id="kbKhuVucContainer" style="display: none;">
-                        <label>Kho bạc Nhà nước khu vực:<span class="text-danger">*</span></label>
-                        <select id="kbKhuVuc" onchange="capNhatDonViCongTac()">
-                            <option value="">-- Chọn khu vực --</option>
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 1;">
+                        <label>Tỉnh/Thành phố trực thuộc TƯ (Nơi ở):<span class="text-danger">*</span></label>
+                        <select id="noTinh" class="select-search" style="width: 100%;">
+                            <option value="">-- Chọn Tỉnh/Thành phố --</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label>Xã/Phường/Đặc khu (Nơi ở):<span class="text-danger">*</span></label>
+                        <select id="noXa" class="select-search" style="width: 100%;" disabled>
+                            <option value="">-- Chọn Xã/Phường/Đặc khu --</option>
+                        </select>
+                    </div>
+                    <input type="hidden" id="noiO" class="required-field" value="">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Kho bạc Nhà nước/khu vực:<span class="text-danger">*</span></label>
+                        <select id="noiCongTac" class="required-field" onchange="thayDoiNoiCongTac()">
+                            <option value="">-- Chọn đơn vị --</option>
+                            <!-- Tùy chọn Kho bạc như cũ... -->
+                            <option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>
                             <option value="Kho bạc Nhà nước khu vực I">Kho bạc Nhà nước khu vực I</option>
                             <option value="Kho bạc Nhà nước khu vực II">Kho bạc Nhà nước khu vực II</option>
                             <option value="Kho bạc Nhà nước khu vực III">Kho bạc Nhà nước khu vực III</option>
@@ -316,9 +347,16 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label>Địa danh (Tỉnh/Thành phố trực thuộc TƯ):</label>
+                        <input type="text" id="diaDanh" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed;" placeholder="Hệ thống tự động hiển thị...">
+                    </div>
+                </div>
+
+                <div class="form-row">        
+                    <div class="form-group">
                         <label>Chức danh:<span class="text-danger">*</span></label>
                         <select id="chucDanh" class="required-field" onchange="kiemTraTuyChonKhac(this, 'chucDanhKhacContainer'); capNhatDonViCongTac();">
-                            <option value="">-- Vui lòng chọn Nơi công tác trước --</option>
+                            <option value="">-- Vui lòng chọn Kho bạc Nhà nước/khu vực --</option>
                         </select>
                         <div id="chucDanhKhacContainer" style="display: none; margin-top: 10px;">
                             <input type="text" id="chucDanhKhac" placeholder="Vui lòng điền chức danh...">
@@ -327,17 +365,19 @@
                     <div class="form-group">
                         <label>Đơn vị công tác:<span class="text-danger">*</span></label>
                         <select id="donViCT" class="required-field" onchange="kiemTraTuyChonKhac(this, 'donViKhacContainer')">
-                            <option value="">-- Vui lòng chọn Nơi công tác trước --</option>
+                            <option value="">-- Vui lòng chọn Kho bạc Nhà nước/khu vực --</option>
                         </select>
                         <div id="donViKhacContainer" style="display: none; margin-top: 10px;">
                             <input type="text" id="donViKhac" placeholder="Vui lòng điền đơn vị...">
                         </div>
                     </div>
                 </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label>Số hiệu công chức:<span class="text-danger">*</span></label>
-                        <input type="number" id="msoCongchuc" placeholder="Nhập số Căn cước công dân" class="required-field">
+                        <input type="text" id="msoCongchuc" placeholder="Nhập đủ 12 số CCCD" class="required-field" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, ''); kiemTraDieuKienHoanThanh();">
+                        <span id="cccdError" style="color: red; font-size: 13px; display: none; margin-top: 5px;">* Căn cước công dân phải gồm đủ 12 chữ số.</span>
                     </div>
                     <div class="form-group">
                         <label>Địa chỉ email:<span class="text-danger">*</span></label>
@@ -350,7 +390,11 @@
         <!-- PHẦN II -->
         <div class="form-container-part">
             <h2>II. QUÁ TRÌNH CÔNG TÁC</h2>
-
+            <div class="instruction-note">
+                <div class="note-title">💡 CHÚ Ý:</div>
+                1. Khi chọn Lý do "Không xếp loại", nhập chi tiết tại <span class="highlight-text"> Phần III, Mục e. Không đánh giá xếp loại.</span>
+		<br>2. Khi chọn Lý do "Thi hành kỷ luật", nhập chi tiết tại <span class="highlight-text"> Phần IV, Mục 2. Kỷ luật.</span>
+            </div>
             <div style="overflow-x: auto;">
                 <table id="workHistoryTable">
                     <thead>
@@ -379,11 +423,11 @@
                             <td class="qua-trinh result-cell">0 năm 0 tháng</td>
                             <td><input type="number" class="thoi-gian-khong-tinh" min="0" placeholder="0" oninput="calculateTime(this)"></td>
                             <td>
+                                <!-- CẬP NHẬT 1: Thay thế "Lý do khác" và loại bỏ <textarea> -->
                                 <select class="ly-do-select" disabled onchange="handleReasonChangePart2(this)">
+                                    <option value="Không xếp loại">Không xếp loại</option>
                                     <option value="Thi hành kỷ luật">Thi hành kỷ luật</option>
-                                    <option value="Lý do khác">Lý do khác</option>
                                 </select>
-                                <textarea class="ly-do-textarea" placeholder="Nhập lý do chi tiết..." style="display: none;"></textarea>
                             </td>
                             <td class="thoi-gian-knc result-cell">0 năm 0 tháng</td>
                         </tr>
@@ -412,7 +456,6 @@
                 Tổng số năm: <span id="totalMuc1" style="font-size: 17px;">0</span> năm
             </div>
 
-            <!-- Mục a -->
             <div class="eval-group">
                 <label>a. Hoàn thành xuất sắc nhiệm vụ:</label>
                 <div class="time-rows-container" id="container-a">
@@ -427,7 +470,6 @@
                 <button class="btn-remove-line" onclick="removeLastRow('container-a'); calculateAllPart3();">Xóa dòng</button>
             </div>
 
-            <!-- Mục b -->
             <div class="eval-group">
                 <label>b. Hoàn thành tốt nhiệm vụ:</label>
                 <div class="time-rows-container" id="container-b">
@@ -442,7 +484,6 @@
                 <button class="btn-remove-line" onclick="removeLastRow('container-b'); calculateAllPart3();">Xóa dòng</button>
             </div>
 
-            <!-- Mục c -->
             <div class="eval-group">
                 <label>c. Hoàn thành nhiệm vụ:</label>
                 <div class="time-rows-container" id="container-c">
@@ -457,7 +498,6 @@
                 <button class="btn-remove-line" onclick="removeLastRow('container-c'); calculateAllPart3();">Xóa dòng</button>
             </div>
 
-            <!-- Mục d -->
             <div class="eval-group">
                 <label>d. Không hoàn thành nhiệm vụ:</label>
                 <div class="time-rows-container" id="container-d">
@@ -471,6 +511,23 @@
                 <button class="btn-add" onclick="addRowGroupPart3('container-d')">+ Thêm giai đoạn mới</button>
                 <button class="btn-remove-line" onclick="removeLastRow('container-d'); calculateAllPart3();">Xóa dòng</button>
             </div>
+
+            <!-- CẬP NHẬT 2: Thêm mục "e. Không đánh giá xếp loại" -->
+            <div class="eval-group" id="group-e" style="display: none;">
+                <label>e. Không đánh giá xếp loại:</label>
+                <div class="time-rows-container" id="container-e">
+                    <div class="time-row" data-type="muc1">
+                        <input type="number" class="tu-nam" placeholder="Từ năm" min="1980" max="2100" oninput="calculateAllPart3()" onchange="validateYearInputPart3(this)">
+                        <span class="separator">đến</span>
+                        <input type="number" class="den-nam" placeholder="Đến năm" min="1980" max="2100" oninput="calculateAllPart3()" onchange="validateYearInputPart3(this)">
+                        <span class="so-nam-row">0 năm</span>
+                        <input type="text" placeholder="Lý do không xếp loại" style="margin-left: 10px; width: 220px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                    </div>
+                </div>
+                <button class="btn-add" onclick="addRowGroupPart3E('container-e')">+ Thêm giai đoạn mới</button>
+                <button class="btn-remove-line" onclick="removeLastRow('container-e'); calculateAllPart3();">Xóa dòng</button>
+            </div>
+
         </div>
 
         <!-- PHẦN IV -->
@@ -500,11 +557,9 @@
             <button class="btn-add" onclick="addRowKhenThuong()">+ Thêm khen thưởng</button>
             <button class="btn-remove-line" onclick="removeLastRowKhenThuong()">Xóa dòng</button>
 
-            <!-- KỶ LUẬT (Đã khôi phục nội dung gốc) -->
             <h3 style="color: #005b9f; margin-top: 25px; margin-bottom: 10px;">2. Kỷ luật</h3>
             <div class="ky-luat-status">
                 - Kỷ luật: <span id="textTrangThaiKyLuat" style="color: #005b9f;">Không.</span>
-                <!-- Dòng yêu cầu thêm từ Phần II -->
                 <span id="textTongKyLuat" style="display:none; font-weight: normal; font-style: italic;">
                     (Tổng thời gian kỷ luật: <span id="tongThangKyLuatVal" style="font-weight: bold; color: red;">0</span> tháng, được tính bằng tổng số thời gian người nhập số tháng khi chọn “Thi hành kỷ luật”)
                 </span>
@@ -512,7 +567,6 @@
 
             <div id="kyLuatWrapper" style="display: none;">
                 <div id="kyLuatContainer">
-                    <!-- Form kỷ luật tự động thêm từ hàm JS -->
                 </div>
                 <div style="margin-top: 15px;">
                     <button type="button" class="btn-add" onclick="addRowKyLuat()">+ Nhập kỷ luật</button>
@@ -521,26 +575,23 @@
             </div>
         </div>
 
-        <!-- PHẦN 5: CAM KẾT & XUẤT FILE -->
+        <!-- PHẦN 5 -->
         <div class="commitment-box">
-            <!-- Đã thêm thuộc tính disabled để khóa mặc định -->
-            <label><input type="checkbox" id="chkChuaNhan" disabled><i><b>Cá nhân tôi chưa được tặng Kỷ niệm chương vì sự nghiệp Tài chính Việt Nam lần nào.</b></i></label>
+            <label><input type="checkbox" id="chkChuaNhan" disabled><i><b>Cá nhân tôi chưa được tặng Kỷ niệm chương vì sự nghiệp Tài chính Việt Nam.</b></i></label>
             <label><input type="checkbox" id="chkCamDoan" disabled><i><b>Tôi cam đoan những nội dung trên là chính xác.</b></i></label>
         </div>
 
         <div style="text-align: right; margin-bottom: 30px;">
             <button class="btn-submit-action" style="background-color: #6c757d;" onclick="xuatFileDocx()">Xuất file</button>
-            <!-- Đã thêm ID, disabled và làm mờ nút Gửi phê duyệt -->
             <button class="btn-submit-action" id="btnGuiPheDuyet" disabled style="opacity: 0.5; cursor: not-allowed;" onclick="guiPheDuyet()">Gửi phê duyệt</button>
         </div>
 
     </div>
 
-    <!-- PHẦN CHÂN TRANG MỚI (STYLE GDT) -->
+    <!-- PHẦN CHÂN TRANG -->
     <div class="footer-gdt">
         <div class="footer-img-box">
-            <!-- Ảnh mô phỏng cơ quan -->
-            <img src="https://via.placeholder.com/150x100.png?text=ẢNH+TÒA+NHÀ" alt="Ảnh Cơ quan" style="width: 100%; height: 100%; object-fit: cover;">
+            <img src="anh-co-quan.jpg" alt="Ảnh Cơ quan" style="width: 100%; height: 100%; object-fit: cover;">
         </div>
         <div class="footer-info">
             <h3>KHO BẠC NHÀ NƯỚC - HỆ THỐNG QUẢN LÝ KỶ NIỆM CHƯƠNG<br>"VÌ SỰ NGHIỆP TÀI CHÍNH VIỆT NAM"</h3>
@@ -555,9 +606,31 @@
         </div>
     </div>
 
-    <!-- SCRIPT ĐIỀU KHIỂN LOGIC -->
     <script>
-        // 1. TABS
+        const diaDanhMap = {
+            'Kho bạc Nhà nước': 'Hà Nội',
+            'Kho bạc Nhà nước khu vực I': 'Hà Nội',
+            'Kho bạc Nhà nước khu vực II': 'Thành phố Hồ Chí Minh',
+            'Kho bạc Nhà nước khu vực III': 'Hải Phòng',
+            'Kho bạc Nhà nước khu vực IV': 'Hưng Yên',
+            'Kho bạc Nhà nước khu vực V': 'Ninh Bình',
+            'Kho bạc Nhà nước khu vực VI': 'Bắc Ninh',
+            'Kho bạc Nhà nước khu vực VII': 'Thái Nguyên',
+            'Kho bạc Nhà nước khu vực VIII': 'Phú Thọ',
+            'Kho bạc Nhà nước khu vực IX': 'Lào Cai',
+            'Kho bạc Nhà nước khu vực X': 'Điện Biên',
+            'Kho bạc Nhà nước khu vực XI': 'Thanh Hóa',
+            'Kho bạc Nhà nước khu vực XII': 'Hà Tĩnh',
+            'Kho bạc Nhà nước khu vực XIII': 'Đà Nẵng',
+            'Kho bạc Nhà nước khu vực XIV': 'Khánh Hòa',
+            'Kho bạc Nhà nước khu vực XV': 'Gia Lai',
+            'Kho bạc Nhà nước khu vực XVI': 'Lâm Đồng',
+            'Kho bạc Nhà nước khu vực XVII': 'Đồng Nai',
+            'Kho bạc Nhà nước khu vực XVIII': 'Tây Ninh',
+            'Kho bạc Nhà nước khu vực XIX': 'Cần Thơ',
+            'Kho bạc Nhà nước khu vực XX': 'An Giang'
+        };
+
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -568,7 +641,13 @@
             evt.currentTarget.className += " active";
         }
 
-        // HÀM CHUNG: Xóa dòng
+        function veTrangChu() {
+            const tablinks = document.getElementsByClassName("tab-links");
+            if(tablinks.length > 0) {
+                tablinks[0].click(); 
+            }
+        }
+        
         function removeLastRow(containerId) {
             const container = document.getElementById(containerId);
             if (container.children.length > 1 || containerId === 'kyLuatContainer') { 
@@ -577,30 +656,25 @@
                 alert("Không thể xóa dòng gốc mặc định!");
             }
         }
+
         function validateBasicYear(el) { 
-            const currentYear = new Date().getFullYear(); // Tự động lấy năm hiện tại
+            const currentYear = new Date().getFullYear();
             let val = parseInt(el.value);
-            
             if (!isNaN(val)) {
-                if (val < 1980) {
-                    el.value = 1980;
-                } else if (val > currentYear) {
+                if (val < 1980) el.value = 1980;
+                else if (val > currentYear) {
                     alert(`Năm không được vượt quá năm hiện tại (${currentYear}).`);
                     el.value = currentYear;
                 }
             }
         }
 
-        // --- HÀM RÀNG BUỘC SỐ THÁNG MAX = 12 ---
         function validateMonthInput(el) {
             let val = parseInt(el.value);
             if (val > 12) el.value = 12;
             if (val < 1) el.value = '';
         }
 
-        // =========================================================================
-        // SCRIPT PHẦN I
-        // =========================================================================
         const duLieu = {
             "CQ": {
                 chucDanh: ["Giám đốc", "Phó Giám đốc", "Chánh Văn phòng", "Phó Chánh Văn phòng", "Trưởng ban", "Phó Trưởng ban", "Chuyên viên chính", "Chuyên viên", "Kế toán viên chính", "Kế toán viên", "Khác..."],
@@ -613,23 +687,28 @@
         };
 
         function thayDoiNoiCongTac() {
-            const noiCongTac = document.getElementById("noiCongTac").value;
+            const giaTriChon = document.getElementById("noiCongTac").value;
             const cbChucDanh = document.getElementById("chucDanh");
-            const kbKhuVucContainer = document.getElementById("kbKhuVucContainer");
-            const cbKbKhuVuc = document.getElementById("kbKhuVuc");
-
+            const inputDiaDanh = document.getElementById("diaDanh");
+            
             cbChucDanh.innerHTML = '<option value="">-- Chọn chức danh --</option>';
             document.getElementById("chucDanhKhacContainer").style.display = 'none';
 
-            if (noiCongTac === "KV") {
-                kbKhuVucContainer.style.display = "block"; 
+            if (giaTriChon && diaDanhMap[giaTriChon]) {
+                inputDiaDanh.value = diaDanhMap[giaTriChon];
             } else {
-                kbKhuVucContainer.style.display = "none";
-                cbKbKhuVuc.value = "";
+                inputDiaDanh.value = "";
             }
 
-            if (noiCongTac !== "") {
-                duLieu[noiCongTac].chucDanh.forEach(item => {
+            let phanLoai = "";
+            if (giaTriChon === "Kho bạc Nhà nước") {
+                phanLoai = "CQ";
+            } else if (giaTriChon.includes("khu vực")) {
+                phanLoai = "KV";
+            }
+
+            if (phanLoai !== "") {
+                duLieu[phanLoai].chucDanh.forEach(item => {
                     let option = document.createElement("option"); option.value = item; option.text = item;
                     cbChucDanh.appendChild(option);
                 });
@@ -638,27 +717,38 @@
         }
 
         function capNhatDonViCongTac() {
-            const noiCongTac = document.getElementById("noiCongTac").value;
+            const giaTriChon = document.getElementById("noiCongTac").value;
             const chucDanh = document.getElementById("chucDanh").value;
-            const kbKhuVuc = document.getElementById("kbKhuVuc").value;
             const cbDonVi = document.getElementById("donViCT");
-
+            
             cbDonVi.innerHTML = '<option value="">-- Chọn đơn vị --</option>';
-            if (noiCongTac === "") return;
+            if (giaTriChon === "") return;
 
+            let phanLoai = (giaTriChon === "Kho bạc Nhà nước") ? "CQ" : "KV";
             const laLanhDao = (chucDanh === "Giám đốc" || chucDanh === "Phó Giám đốc");
+            const laVanPhong = (chucDanh === "Chánh Văn phòng" || chucDanh === "Phó Chánh Văn phòng");
+            const laTruongBan = (chucDanh === "Trưởng ban" || chucDanh === "Phó Trưởng ban");
+
             if (laLanhDao) {
-                if (noiCongTac === "CQ") {
+                if (phanLoai === "CQ") {
                     cbDonVi.innerHTML = '<option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>';
-                } else if (noiCongTac === "KV" && kbKhuVuc !== "") {
-                    cbDonVi.innerHTML = `<option value="${kbKhuVuc}">${kbKhuVuc}</option>`;
+                } else if (phanLoai === "KV") {
+                    cbDonVi.innerHTML = `<option value="${giaTriChon}">${giaTriChon}</option>`;
                 }
+            } else if (laVanPhong && phanLoai === "CQ") {
+                cbDonVi.innerHTML = '<option value="Văn phòng KBNN">Văn phòng KBNN</option>';
             } else {
-                duLieu[noiCongTac].donVi.forEach(item => {
-                    let option = document.createElement("option"); option.value = item; option.text = item;
+                duLieu[phanLoai].donVi.forEach(item => {
+                    if (laTruongBan && phanLoai === "CQ" && item === "Văn phòng KBNN") {
+                        return; 
+                    }
+                    let option = document.createElement("option"); 
+                    option.value = item; 
+                    option.text = item;
                     cbDonVi.appendChild(option);
                 });
             }
+            
             kiemTraTuyChonKhac(cbDonVi, 'donViKhacContainer');
         }
 
@@ -666,12 +756,10 @@
             document.getElementById(containerId).style.display = (selectElement.value === 'Khác...') ? 'block' : 'none';
         }
 
-        // =========================================================================
-        // SCRIPT PHẦN II & KẾT NỐI PHẦN IV
-        // =========================================================================
         function addRowPart2() {
             const tbody = document.getElementById('tableBodyPart2');
             const row = document.createElement('tr');
+            // CẬP NHẬT 1: Thay đổi Lý do ở dòng mới được thêm vào
             row.innerHTML = `
                 <td><input type="number" class="from-month" min="1" max="12" placeholder="MM" oninput="validateMonthInput(this); calculateTime(this)"></td>
                 <td><input type="number" class="from-year" min="1980" max="2100" placeholder="YYYY" oninput="calculateTime(this)" onchange="validateYearsPart2(this)"></td>
@@ -683,9 +771,8 @@
                 <td><input type="number" class="thoi-gian-khong-tinh" min="0" placeholder="0" oninput="calculateTime(this)"></td>
                 <td>
                     <select class="ly-do-select" disabled onchange="handleReasonChangePart2(this)">
-                        <option value="Thi hành kỷ luật">Thi hành kỷ luật</option><option value="Lý do khác">Lý do khác</option>
+                        <option value="Thi hành kỷ luật">Thi hành kỷ luật</option><option value="Không xếp loại">Không xếp loại</option>
                     </select>
-                    <textarea class="ly-do-textarea" placeholder="Nhập lý do chi tiết..." style="display: none;"></textarea>
                 </td>
                 <td class="thoi-gian-knc result-cell">0 năm 0 tháng</td>
             `;
@@ -702,25 +789,21 @@
             return result.trim();
         }
 
-            function validateYearsPart2(element) {
-            const currentYear = new Date().getFullYear(); // Tự động lấy năm hiện tại
+        function validateYearsPart2(element) {
+            const currentYear = new Date().getFullYear();
             let currentInputVal = parseInt(element.value);
-            
             if (!isNaN(currentInputVal)) {
-                if (currentInputVal < 1980) {
-                    element.value = 1980;
-                } else if (currentInputVal > currentYear) {
+                if (currentInputVal < 1980) element.value = 1980;
+                else if (currentInputVal > currentYear) {
                     alert(`Năm không được vượt quá năm hiện tại (${currentYear}).`);
                     element.value = currentYear;
                 }
-                calculateTime(element); // Gọi lại hàm tính toán thời gian
+                calculateTime(element);
             }
         }
 
+        // CẬP NHẬT 1: Gỡ bỏ textarea
         function handleReasonChangePart2(selectElement) {
-            const row = selectElement.closest('tr');
-            const textarea = row.querySelector('.ly-do-textarea');
-            textarea.style.display = (selectElement.value === "Lý do khác") ? "block" : "none";
             calculateTotalPart2(); 
         }
 
@@ -743,44 +826,46 @@
             const excludeInput = row.querySelector('.thoi-gian-khong-tinh');
             const excludeMonths = parseInt(excludeInput.value) || 0;
             const reasonSelect = row.querySelector('.ly-do-select');
-            const reasonTextarea = row.querySelector('.ly-do-textarea');
 
+            // CẬP NHẬT 1: Gỡ bỏ logic ẩn/hiện textarea
             if (excludeMonths > 0) {
                 reasonSelect.disabled = false;
             } else {
                 reasonSelect.disabled = true;
                 reasonSelect.value = "Thi hành kỷ luật";
-                reasonTextarea.style.display = "none";
             }
 
             let kncMonths = totalMonths - excludeMonths;
             if (kncMonths < 0) kncMonths = 0;
             row.setAttribute('data-knc-months', kncMonths);
             row.querySelector('.thoi-gian-knc').textContent = formatMonthsToYears(kncMonths);
-
             calculateTotalPart2();
         }
 
         function calculateTotalPart2() {
             const rows = document.querySelectorAll('#tableBodyPart2 tr');
             let sumTotalMonths = 0, sumExcludeMonths = 0, sumKNCMonths = 0, tongThangKyLuat = 0;
+            let hienThiMucE = false; // Biến cờ kiểm tra hiển thị mục e
 
             rows.forEach(row => {
                 sumTotalMonths += parseInt(row.getAttribute('data-months')) || 0;
                 let excludeM = parseInt(row.querySelector('.thoi-gian-khong-tinh').value) || 0;
                 sumExcludeMonths += excludeM;
                 sumKNCMonths += parseInt(row.getAttribute('data-knc-months')) || 0;
-
-                // Kiểm tra điều kiện bật form kỷ luật Phần IV
+                
                 let reason = row.querySelector('.ly-do-select').value;
-                if (excludeM > 0 && reason === "Thi hành kỷ luật") {
-                    tongThangKyLuat += excludeM;
-                }
+                if (excludeM > 0 && reason === "Thi hành kỷ luật") tongThangKyLuat += excludeM;
+                
+                // CẬP NHẬT 2: Kiểm tra nếu có dòng chọn Không xếp loại
+                if (excludeM > 0 && reason === "Không xếp loại") hienThiMucE = true;
             });
-
+            
             document.getElementById('tongQuaTrinh').textContent = formatMonthsToYears(sumTotalMonths);
             document.getElementById('tongKhongTinh').textContent = sumExcludeMonths > 0 ? sumExcludeMonths + " tháng" : "0";
             document.getElementById('tongKNC').textContent = formatMonthsToYears(sumKNCMonths);
+            
+            // CẬP NHẬT 2: Ẩn/Hiện mục "e." tương ứng
+            document.getElementById('group-e').style.display = hienThiMucE ? 'block' : 'none';
 
             kichHoatFormKyLuat(tongThangKyLuat);
         }
@@ -790,14 +875,11 @@
             const textTong = document.getElementById('textTongKyLuat');
             const formKyLuat = document.getElementById('kyLuatWrapper');
             const containerKyLuat = document.getElementById('kyLuatContainer');
-            
             if (soThang > 0) {
                 textTrangThai.textContent = 'Có.';
                 textTrangThai.style.color = '#dc3545';
-                
                 textTong.style.display = 'inline';
                 document.getElementById('tongThangKyLuatVal').textContent = soThang;
-                
                 formKyLuat.style.display = 'block';
                 if(containerKyLuat.children.length === 0) { addRowKyLuat(); }
             } else {
@@ -808,86 +890,60 @@
             }
         }
 
-        // =========================================================================
-        // SCRIPT PHẦN III
-        // =========================================================================
         function validateYearInputPart3(element) {
-            const currentYear = new Date().getFullYear(); // Tự động lấy năm hiện tại
+            const currentYear = new Date().getFullYear();
             let currentVal = parseInt(element.value);
-
-            // 1. Giới hạn năm nhỏ nhất là 1980 và lớn nhất là Năm hiện tại
             if (!isNaN(currentVal)) {
-                if (currentVal < 1980) {
-                    element.value = 1980;
-                    currentVal = 1980;
-                } else if (currentVal > currentYear) {
+                if (currentVal < 1980) { element.value = 1980; currentVal = 1980; }
+                else if (currentVal > currentYear) {
                     alert(`Năm không được vượt quá năm hiện tại (${currentYear}).`);
-                    element.value = currentYear;
-                    currentVal = currentYear;
+                    element.value = currentYear; currentVal = currentYear;
                 }
             }
-
             const currentRow = element.closest('.time-row');
             const tuNamInput = currentRow.querySelector('.tu-nam');
             const denNamInput = currentRow.querySelector('.den-nam');
-            
             const tuNam = parseInt(tuNamInput.value);
             const denNam = parseInt(denNamInput.value);
 
-            // 2. Kiểm tra logic cơ bản: Đến năm phải >= Từ năm
             if (!isNaN(tuNam) && !isNaN(denNam)) {
                 if (denNam < tuNam) {
                     alert("Lưu ý: 'Đến năm' phải lớn hơn hoặc bằng 'Từ năm'.");
-                    element.value = ''; // Xóa ô gây sai logic
-                    calculateAllPart3();
-                    return; // Dừng việc kiểm tra tiếp
+                    element.value = ''; 
+                    calculateAllPart3(); return; 
                 }
             }
-
-            // 3. Kiểm tra trùng lặp thời gian với tất cả các dòng khác
             if (!isNaN(currentVal)) {
                 const checkStart = isNaN(tuNam) ? currentVal : tuNam;
                 const checkEnd = isNaN(denNam) ? currentVal : denNam;
-
                 const allRows = document.querySelectorAll('.time-row[data-type="muc1"]');
                 let hasOverlap = false;
-
                 for (let i = 0; i < allRows.length; i++) {
                     const row = allRows[i];
                     if (row === currentRow) continue;
-
                     const otherTuNam = parseInt(row.querySelector('.tu-nam').value);
                     const otherDenNam = parseInt(row.querySelector('.den-nam').value);
-
                     if (!isNaN(otherTuNam) || !isNaN(otherDenNam)) {
                         const compareStart = isNaN(otherTuNam) ? otherDenNam : otherTuNam;
                         const compareEnd = isNaN(otherDenNam) ? otherTuNam : otherDenNam;
-
                         const maxStart = Math.max(checkStart, compareStart);
                         const minEnd = Math.min(checkEnd, compareEnd);
-
-                        if (maxStart <= minEnd) {
-                            hasOverlap = true;
-                            break;
-                        }
+                        if (maxStart <= minEnd) { hasOverlap = true; break; }
                     }
                 }
-
                 if (hasOverlap) {
                     alert("Lưu ý: Thời gian này đã bị trùng lặp với một giai đoạn ở mục khác. Vui lòng nhập khoảng thời gian khác!");
                     element.value = ''; 
                 }
             }
-            
             calculateAllPart3(); 
         }
 
-        // HÀM THÊM DÒNG MỚI (giữ nguyên như bản v2)
         function addRowGroupPart3(containerId) {
             const container = document.getElementById(containerId);
             const newRow = document.createElement('div');
             newRow.className = 'time-row';
-            newRow.setAttribute('data-type', 'muc1'); // Cờ nhận diện để quét trùng lặp
+            newRow.setAttribute('data-type', 'muc1');
             newRow.innerHTML = `
                 <input type="number" class="tu-nam" placeholder="Từ năm" min="1980" max="2100" oninput="calculateAllPart3()" onchange="validateYearInputPart3(this)">
                 <span class="separator">đến</span>
@@ -897,7 +953,22 @@
             container.appendChild(newRow);
         }
 
-        // HÀM TÍNH TỔNG (giữ nguyên như bản v2)
+        // CẬP NHẬT 2: Hàm thêm dòng cho riêng mục e (có ô nhập lý do)
+        function addRowGroupPart3E(containerId) {
+            const container = document.getElementById(containerId);
+            const newRow = document.createElement('div');
+            newRow.className = 'time-row';
+            newRow.setAttribute('data-type', 'muc1');
+            newRow.innerHTML = `
+                <input type="number" class="tu-nam" placeholder="Từ năm" min="1980" max="2100" oninput="calculateAllPart3()" onchange="validateYearInputPart3(this)">
+                <span class="separator">đến</span>
+                <input type="number" class="den-nam" placeholder="Đến năm" min="1980" max="2100" oninput="calculateAllPart3()" onchange="validateYearInputPart3(this)">
+                <span class="so-nam-row">0 năm</span>
+                <input type="text" placeholder="Lý do không xếp loại" style="margin-left: 10px; width: 220px; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+            `;
+            container.appendChild(newRow);
+        }
+
         function calculateAllPart3() {
             const rowsMuc1 = document.querySelectorAll('.time-row[data-type="muc1"]');
             let grandTotalMuc1 = 0;
@@ -912,9 +983,6 @@
             document.getElementById('totalMuc1').textContent = grandTotalMuc1;
         }
 
-        // =========================================================================
-        // SCRIPT PHẦN IV
-        // =========================================================================
         function addRowKhenThuong() {
             const tbody = document.getElementById('khenThuongBody');
             const newRow = document.createElement('tr');
@@ -930,18 +998,14 @@
 
         function removeLastRowKhenThuong() {
             const t = document.getElementById('khenThuongBody');
-            if(t.children.length > 1) {
-                t.removeChild(t.lastElementChild);
-            }
+            if(t.children.length > 1) t.removeChild(t.lastElementChild);
         }
 
-        // HÀM BÊ NGUYÊN HTML GỐC CHO PHẦN KỶ LUẬT
         function addRowKyLuat() {
             const container = document.getElementById('kyLuatContainer');
             const count = container.children.length + 1;
             const newCard = document.createElement('div');
             newCard.className = 'ky-luat-card';
-            
             newCard.innerHTML = `
                 <div style="font-weight: bold; margin-bottom: 5px; color: #d35400;">+ Kỷ luật lần ${count}:</div>
                 <div class="kl-flex-row" style="gap: 10px; margin-bottom: 10px;">
@@ -951,21 +1015,11 @@
                 <div class="kl-flex-row" style="gap: 10px; margin-bottom: 10px;">
                     <div style="flex: 1;">
                         <label>Mức kỷ luật:</label>
-                        <select>
-                            <option value="">-- Chọn mức kỷ luật --</option>
-                            <option value="Khiển trách">Khiển trách</option>
-                            <option value="Cảnh cáo">Cảnh cáo</option>
-                            <option value="Cách chức">Cách chức</option>
-                        </select>
+                        <select><option value="">-- Chọn mức kỷ luật --</option><option value="Khiển trách">Khiển trách</option><option value="Cảnh cáo">Cảnh cáo</option><option value="Cách chức">Cách chức</option></select>
                     </div>
                     <div style="flex: 1;">
                         <label>Xếp loại:</label>
-                        <select onchange="handleXepLoaiChangeKhac(this)">
-                            <option value="">-- Chọn xếp loại --</option>
-                            <option value="Hoàn thành nhiệm vụ">Hoàn thành nhiệm vụ</option>
-                            <option value="Không hoàn thành nhiệm vụ">Không hoàn thành nhiệm vụ</option>
-                            <option value="Khác">Khác</option>
-                        </select>
+                        <select onchange="handleXepLoaiChangeKhac(this)"><option value="">-- Chọn xếp loại --</option><option value="Hoàn thành nhiệm vụ">Hoàn thành nhiệm vụ</option><option value="Không hoàn thành nhiệm vụ">Không hoàn thành nhiệm vụ</option><option value="Khác">Khác</option></select>
                         <input type="text" class="xl-khac-input" placeholder="Xếp loại khác" style="display: none; margin-top: 5px;">
                     </div>
                 </div>
@@ -980,17 +1034,10 @@
 
         function handleXepLoaiChangeKhac(selectElement) {
             const inputKhac = selectElement.nextElementSibling;
-            if (selectElement.value === "Khác") {
-                inputKhac.style.display = "block";
-            } else {
-                inputKhac.style.display = "none";
-                inputKhac.value = ""; 
-            }
+            if (selectElement.value === "Khác") inputKhac.style.display = "block";
+            else { inputKhac.style.display = "none"; inputKhac.value = ""; }
         }
 
-        // =========================================================================
-        // SCRIPT GỬI PHÊ DUYỆT
-        // =========================================================================
         function guiPheDuyet() {
             if(!document.getElementById('chkChuaNhan').checked || !document.getElementById('chkCamDoan').checked) {
                 alert("Vui lòng tích chọn cả 2 ô cam kết ở cuối trang trước khi gửi!");
@@ -999,33 +1046,31 @@
             alert("Đã gửi hồ sơ phê duyệt thành công!");
         }
 
-        // =========================================================================
-        // SCRIPT KIỂM TRA ĐIỀU KIỆN (BẬT/TẮT CHECKBOX VÀ NÚT GỬI)
-        // =========================================================================
-
-        // Hàm kiểm tra tổng thể Phần I và Phần II
         function kiemTraDieuKienHoanThanh() {
             let hopLe = true;
-
-            // 1. Kiểm tra Phần I: Quét tất cả các trường có class 'required-field'
             const cacTruongBatBuoc = document.querySelectorAll('#kyNiemChuongForm .required-field');
             cacTruongBatBuoc.forEach(truong => {
-                if (truong.value.trim() === '') {
-                    hopLe = false;
-                }
+                if (truong.value.trim() === '') hopLe = false;
             });
-
-            // Kiểm tra thêm các trường 'Khác' nếu chúng đang được hiển thị
-            const kbKhuVucContainer = document.getElementById('kbKhuVucContainer');
-            if (kbKhuVucContainer.style.display !== 'none' && document.getElementById('kbKhuVuc').value === '') hopLe = false;
+            
+            const msoCongchuc = document.getElementById('msoCongchuc');
+            const cccdError = document.getElementById('cccdError');
+            if (msoCongchuc && msoCongchuc.value.length !== 12) {
+                hopLe = false;
+                if (msoCongchuc.value.length > 0) {
+                    if (cccdError) cccdError.style.display = 'block';
+                } else {
+                    if (cccdError) cccdError.style.display = 'none';
+                }
+            } else {
+                if (cccdError) cccdError.style.display = 'none';
+            }
 
             const chucDanhKhacContainer = document.getElementById('chucDanhKhacContainer');
             if (chucDanhKhacContainer.style.display !== 'none' && document.getElementById('chucDanhKhac').value.trim() === '') hopLe = false;
-
             const donViKhacContainer = document.getElementById('donViKhacContainer');
             if (donViKhacContainer.style.display !== 'none' && document.getElementById('donViKhac').value.trim() === '') hopLe = false;
-
-            // 2. Kiểm tra Phần II: Quét tất cả các dòng trong bảng Quá trình công tác
+            
             const cacDongPhan2 = document.querySelectorAll('#tableBodyPart2 tr');
             cacDongPhan2.forEach(dong => {
                 const tuThang = dong.querySelector('.from-month').value;
@@ -1034,82 +1079,49 @@
                 const denNam = dong.querySelector('.to-year').value;
                 const chucVu = dong.querySelector('.chuc-vu').value.trim();
                 const donVi = dong.querySelector('.don-vi').value.trim();
-
-                // Nếu bất kỳ ô nào trong dòng bị trống, form chưa hợp lệ
                 if (tuThang === '' || tuNam === '' || denThang === '' || denNam === '' || chucVu === '' || donVi === '') {
                     hopLe = false;
                 }
             });
 
-            // 3. Cập nhật trạng thái cho 2 Checkbox
             const chkChuaNhan = document.getElementById('chkChuaNhan');
             const chkCamDoan = document.getElementById('chkCamDoan');
-
             if (hopLe) {
-                // Đủ thông tin -> Mở khóa checkbox
-                chkChuaNhan.disabled = false;
-                chkCamDoan.disabled = false;
+                chkChuaNhan.disabled = false; chkCamDoan.disabled = false;
             } else {
-                // Thiếu thông tin -> Khóa checkbox, bỏ tích và khóa luôn nút Gửi
-                chkChuaNhan.disabled = true;
-                chkCamDoan.disabled = true;
-                chkChuaNhan.checked = false;
-                chkCamDoan.checked = false;
+                chkChuaNhan.disabled = true; chkCamDoan.disabled = true;
+                chkChuaNhan.checked = false; chkCamDoan.checked = false;
                 kiemTraTrangThaiNutGui(); 
             }
         }
 
-        // Hàm kiểm tra 2 ô Checkbox để bật/tắt nút Gửi
         function kiemTraTrangThaiNutGui() {
             const daTichChuaNhan = document.getElementById('chkChuaNhan').checked;
             const daTichCamDoan = document.getElementById('chkCamDoan').checked;
             const nutGui = document.getElementById('btnGuiPheDuyet');
-
             if (daTichChuaNhan && daTichCamDoan) {
-                // Đã tích đủ 2 ô -> Sáng nút Gửi
-                nutGui.disabled = false;
-                nutGui.style.opacity = '1';
-                nutGui.style.cursor = 'pointer';
+                nutGui.disabled = false; nutGui.style.opacity = '1'; nutGui.style.cursor = 'pointer';
             } else {
-                // Chưa tích đủ -> Mờ nút Gửi
-                nutGui.disabled = true;
-                nutGui.style.opacity = '0.5';
-                nutGui.style.cursor = 'not-allowed';
+                nutGui.disabled = true; nutGui.style.opacity = '0.5'; nutGui.style.cursor = 'not-allowed';
             }
         }
 
-        // Lắng nghe mọi sự thay đổi trên tab Lập báo cáo để tự động tính toán
         document.addEventListener('DOMContentLoaded', () => {
             const tabLapBaoCao = document.getElementById('TabLapBaoCao');
-            
-            // Khi người dùng gõ phím hoặc thay đổi lựa chọn
             tabLapBaoCao.addEventListener('input', kiemTraDieuKienHoanThanh);
             tabLapBaoCao.addEventListener('change', (e) => {
                 kiemTraDieuKienHoanThanh();
-                // Nếu người dùng click vào checkbox, kiểm tra lại nút gửi
-                if (e.target.type === 'checkbox') {
-                    kiemTraTrangThaiNutGui();
-                }
+                if (e.target.type === 'checkbox') kiemTraTrangThaiNutGui();
             });
-
-            // Chạy kiểm tra một lần ngay khi vừa load web để khóa mọi thứ đúng chuẩn
             kiemTraDieuKienHoanThanh();
         });
 
-        // =========================================================================
-        // SCRIPT XUẤT FILE DOCX
-        // =========================================================================
-
         function xuatFileDocx() {
-            // 1. GOM DỮ LIỆU TỪ FORM (MAPPING)
-            
-            // Hàm nhỏ để xử lý chức danh / đơn vị (vì có nút "Khác...")
             const layGiaTriThuc = (idSelect, idKhac) => {
                 const select = document.getElementById(idSelect);
                 return select.value === 'Khác...' ? document.getElementById(idKhac).value : select.value;
             };
 
-            // Map dữ liệu cơ bản Phần I
             const dataMap = {
                 hoTen: document.getElementById('hoTen').value,
                 gioiTinh: document.getElementById('gioiTinh').value,
@@ -1119,13 +1131,10 @@
                 noiO: document.getElementById('noiO').value,
                 chucDanh: layGiaTriThuc('chucDanh', 'chucDanhKhac'),
                 donViCT: layGiaTriThuc('donViCT', 'donViKhac'),
-                
-                // Chuẩn bị mảng trống cho các bảng
                 quaTrinh: [],
                 khenThuong: []
             };
 
-            // Map bảng Phần II: Quá trình công tác
             const rowsQT = document.querySelectorAll('#tableBodyPart2 tr');
             rowsQT.forEach(row => {
                 const tuThang = row.querySelector('.from-month').value;
@@ -1137,7 +1146,6 @@
                 const quaTrinhCT = row.querySelector('.qua-trinh').textContent;
                 const thoiGianXet = row.querySelector('.thoi-gian-knc').textContent;
 
-                // Chỉ đưa vào bảng Word nếu dòng này có dữ liệu hợp lệ
                 if (tuThang && tuNam) {
                     dataMap.quaTrinh.push({
                         thoiGian: `${tuThang}/${tuNam} đến ${denThang}/${denNam}`,
@@ -1148,12 +1156,11 @@
                 }
             });
 
-            // Map bảng Khen thưởng
             const rowsKT = document.querySelectorAll('#khenThuongBody tr');
             rowsKT.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 const nam = cells[1].querySelector('input').value;
-                if (nam) { // Đảm bảo dòng có nhập dữ liệu
+                if (nam) { 
                     dataMap.khenThuong.push({
                         stt: cells[0].textContent,
                         nam: nam,
@@ -1164,7 +1171,6 @@
                 }
             });
 
-            // Map các trạng thái cam kết và kỷ luật
             dataMap.camKetKNC = document.getElementById('chkChuaNhan').checked 
                 ? "Cá nhân tôi chưa được tặng Kỷ niệm chương vì sự nghiệp Tài chính Việt Nam lần nào." 
                 : "Đã từng nhận (hoặc chưa xác nhận).";
@@ -1173,35 +1179,120 @@
                 ? `Bị kỷ luật ${document.getElementById('tongThangKyLuatVal').textContent} tháng.` 
                 : "Không";
 
-            // 2. TẢI TEMPLATE VÀ XUẤT FILE
-            // Đọc file mau_bao_cao.docx (Hãy đảm bảo file mau_bao_cao.docx nằm cùng thư mục với file final.html)
             PizZipUtils.getBinaryContent("mau_bao_cao.docx", function(error, content) {
                 if (error) {
                     alert("Không tìm thấy file mẫu 'mau_bao_cao.docx'. Hãy chắc chắn bạn đã chạy trên localhost và để file cùng thư mục!");
                     throw error;
                 }
-                
-                // Khởi tạo thư viện
                 const zip = new PizZip(content);
-                const doc = new window.docxtemplater(zip, {
-                    paragraphLoop: true,
-                    linebreaks: true,
-                });
-
-                // Nạp dữ liệu vừa gom (dataMap) vào thẻ {} trong file Word
+                const doc = new window.docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
                 doc.render(dataMap);
-
-                // Tạo file tải xuống
                 const blob = doc.getZip().generate({
                     type: "blob",
                     mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
-                
-                // Lưu file thành Bao_Cao_TenNguoiKhai.docx
                 saveAs(blob, "Bao_Cao_" + (dataMap.hoTen || "Ca_Nhan") + ".docx");
             });
         }
 
+        let diaGioiData = {};
+
+        $(document).ready(function() {
+            $('.select-search').select2({
+                language: { noResults: function() { return "Không tìm thấy kết quả"; } }
+            });
+
+            docFileExcelDiaDanh();
+            batSuKienThayDoi('qq'); 
+            batSuKienThayDoi('no'); 
+        });
+
+        async function docFileExcelDiaDanh() {
+            try {
+                const response = await fetch('Danh-muc-Phuong-xa.xlsx');
+                const arrayBuffer = await response.arrayBuffer();
+                
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                jsonData.forEach(row => {
+                    const tinh = row['Tên tỉnh/TP mới'];
+                    const xa = row['Tên Phường/Xã mới'];
+                    
+                    if (tinh && xa) {
+                        const tinhTrim = String(tinh).trim();
+                        const xaTrim = String(xa).trim();
+                        
+                        if (!diaGioiData[tinhTrim]) diaGioiData[tinhTrim] = [];
+                        if (!diaGioiData[tinhTrim].includes(xaTrim)) {
+                            diaGioiData[tinhTrim].push(xaTrim);
+                        }
+                    }
+                });
+                
+                doDuLieuTinh('qqTinh');
+                doDuLieuTinh('noTinh');
+                
+            } catch (error) {
+                console.error("Lỗi đọc file Excel:", error);
+                alert("Lỗi tải danh mục Tỉnh/Xã. Hãy đảm bảo bạn đang chạy file HTML thông qua một Local Server (như Live Server trên VS Code).");
+            }
+        }
+
+        function doDuLieuTinh(selectId) {
+            const select = $('#' + selectId);
+            select.empty().append('<option value="">-- Chọn Tỉnh/Thành phố --</option>');
+            
+            Object.keys(diaGioiData).sort().forEach(tinh => {
+                select.append(new Option(tinh, tinh, false, false));
+            });
+            select.trigger('change.select2');
+        }
+
+        function batSuKienThayDoi(loai) {
+            const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh';
+            const xaId = loai === 'qq' ? '#qqXa' : '#noXa';
+            const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
+            
+            $(tinhId).on('change', function() {
+                const selectedTinh = $(this).val();
+                const xaSelect = $(xaId);
+                
+                xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
+                
+                if (selectedTinh && diaGioiData[selectedTinh]) {
+                    xaSelect.prop('disabled', false); 
+                    diaGioiData[selectedTinh].sort().forEach(xa => {
+                        xaSelect.append(new Option(xa, xa, false, false));
+                    });
+                } else {
+                    xaSelect.prop('disabled', true);
+                }
+                xaSelect.trigger('change.select2');
+                capNhatInputAn(tinhId, xaId, hiddenId);
+            });
+            
+            $(xaId).on('change', function() {
+                capNhatInputAn(tinhId, xaId, hiddenId);
+            });
+        }
+
+        function capNhatInputAn(tinhId, xaId, hiddenId) {
+            const tinhVal = $(tinhId).val();
+            const xaVal = $(xaId).val();
+            const hiddenInput = document.getElementById(hiddenId);
+            
+            if (tinhVal && xaVal) {
+                hiddenInput.value = xaVal + ', ' + tinhVal;
+            } else {
+                hiddenInput.value = "";
+            }
+            
+            if(typeof kiemTraDieuKienHoanThanh === 'function') {
+                kiemTraDieuKienHoanThanh();
+            }
+        }
     </script>
 </body>
 </html>

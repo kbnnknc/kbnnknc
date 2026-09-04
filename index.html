@@ -248,8 +248,27 @@
                 <span id="textTongKyLuat" style="display:none; font-weight: normal; font-style: italic;"> (Tổng thời gian kỷ luật: <span id="tongThangKyLuatVal" style="font-weight: bold; color: red;">0</span> tháng, được tính bằng tổng số thời gian người nhập số tháng khi chọn “Thi hành kỷ luật”)</span>
             </div>
             <div id="kyLuatWrapper" style="display: none;">
-                <div id="kyLuatContainer"></div>
-                <div style="margin-top: 15px;"><button type="button" class="btn-add" onclick="addRowKyLuat()">+ Nhập kỷ luật</button><button type="button" class="btn-remove-line" onclick="removeLastRow('kyLuatContainer')">Xóa dòng</button></div>
+                <div style="overflow-x: auto;">
+                    <table id="kyLuatTable" style="margin-bottom: 10px; width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="width: 40px;">STT</th>
+                                <th style="width: 80px;">Năm</th>
+                                <th>Lý do</th>
+                                <th style="width: 140px;">Mức kỷ luật</th>
+                                <th style="width: 160px;">Xếp loại</th>
+                                <th style="width: 120px;">Từ ngày</th>
+                                <th style="width: 120px;">Đến ngày</th>
+                                <th style="width: 100px;">Thời hạn (tháng)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="kyLuatContainer"></tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button type="button" class="btn-add" onclick="addRowKyLuat()">+ Nhập kỷ luật</button>
+                    <button type="button" class="btn-remove-line" onclick="removeLastRowKyLuat()">Xóa dòng</button>
+                </div>
             </div>
         </div>
 
@@ -514,25 +533,65 @@
         function removeLastRowKhenThuong() { const t = document.getElementById('khenThuongBody'); if(t.children.length > 1) t.removeChild(t.lastElementChild); }
 
         function addRowKyLuat() {
-            const container = document.getElementById('kyLuatContainer'); const count = container.children.length + 1; const newCard = document.createElement('div');
-            newCard.className = 'ky-luat-card';
-            newCard.innerHTML = `
-                <div style="font-weight: bold; margin-bottom: 5px; color: #d35400;">+ Kỷ luật lần ${count}:</div>
-                <div class="kl-flex-row" style="gap: 10px; margin-bottom: 10px;">
-                    <div style="flex: 0 0 100px;"><label>Năm:</label><input type="number" placeholder="YYYY" min="1980" max="2100" onchange="validateBasicYear(this)"></div>
-                    <div style="flex: 1;"><label>Lý do:</label><input type="text" placeholder="..."></div>
-                </div>
-                <div class="kl-flex-row" style="gap: 10px; margin-bottom: 10px;">
-                    <div style="flex: 1;"><label>Mức kỷ luật:</label><select><option value="">-- Chọn mức kỷ luật --</option><option value="Khiển trách">Khiển trách</option><option value="Cảnh cáo">Cảnh cáo</option><option value="Cách chức">Cách chức</option></select></div>
-                    <div style="flex: 1;"><label>Xếp loại:</label><select onchange="handleXepLoaiChangeKhac(this)"><option value="">-- Chọn xếp loại --</option><option value="Hoàn thành nhiệm vụ">Hoàn thành nhiệm vụ</option><option value="Không hoàn thành nhiệm vụ">Không hoàn thành nhiệm vụ</option><option value="Khác">Khác</option></select><input type="text" class="xl-khac-input" placeholder="Xếp loại khác" style="display: none; margin-top: 5px;"></div>
-                </div>
-                <div class="kl-flex-row" style="gap: 10px;">
-                    <div class="kl-flex-item"><label>Từ ngày:</label><input type="date"></div>
-                    <div class="kl-flex-item"><label>Kết thúc ngày:</label><input type="date"></div>
-                    <div class="kl-flex-item"><label>Thời hạn (tháng):</label><input type="number" placeholder="Số tháng" min="0"></div>
-                </div>
+            const tbody = document.getElementById('kyLuatContainer'); 
+            const count = tbody.children.length + 1; 
+            const newRow = document.createElement('tr');
+            
+            newRow.innerHTML = `
+                <td class="stt-cell">${count}</td>
+                <td><input type="number" min="1980" max="2100" placeholder="YYYY" onchange="validateBasicYear(this)"></td>
+                <td><input type="text" placeholder="..."></td>
+                <td>
+                    <select style="width: 100%; height: 35px; border: 1px solid #ccc; border-radius: 4px;">
+                        <option value="">-- Chọn --</option>
+                        <option value="Khiển trách">Khiển trách</option>
+                        <option value="Cảnh cáo">Cảnh cáo</option>
+                        <option value="Cách chức">Cách chức</option>
+                    </select>
+                </td>
+                <td>
+                    <select style="width: 100%; height: 35px; border: 1px solid #ccc; border-radius: 4px;" onchange="handleXepLoaiChangeKhac(this)">
+                        <option value="">-- Chọn --</option>
+                        <option value="Hoàn thành nhiệm vụ">Hoàn thành nhiệm vụ</option>
+                        <option value="Không hoàn thành nhiệm vụ">Không hoàn thành nhiệm vụ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                    <input type="text" class="xl-khac-input" placeholder="Xếp loại khác" style="display: none; margin-top: 5px; width: 100%;">
+                </td>
+                <td><input type="date" class="kl-tu-ngay" onchange="tinhThangKyLuat(this)"></td>
+                <td><input type="date" class="kl-den-ngay" onchange="tinhThangKyLuat(this)"></td>
+                <td><input type="number" class="kl-thoi-han" placeholder="0" min="0" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed; text-align: center;"></td>
             `;
-            container.appendChild(newCard);
+            tbody.appendChild(newRow);
+        }
+
+        function removeLastRowKyLuat() { 
+            const t = document.getElementById('kyLuatContainer'); 
+            if(t.children.length > 0) t.removeChild(t.lastElementChild); 
+        }
+
+        function tinhThangKyLuat(element) {
+            const row = element.closest('tr');
+            const tuNgayVal = row.querySelector('.kl-tu-ngay').value;
+            const denNgayVal = row.querySelector('.kl-den-ngay').value;
+            const thoiHanInput = row.querySelector('.kl-thoi-han');
+
+            if (tuNgayVal && denNgayVal) {
+                const tuNgay = new Date(tuNgayVal);
+                const denNgay = new Date(denNgayVal);
+
+                if (denNgay >= tuNgay) {
+                    let months = (denNgay.getFullYear() - tuNgay.getFullYear()) * 12;
+                    months -= tuNgay.getMonth();
+                    months += denNgay.getMonth();
+                    
+                    thoiHanInput.value = months > 0 ? months : 0;
+                } else {
+                    alert("Đến ngày phải lớn hơn hoặc bằng Từ ngày.");
+                    element.value = '';
+                    thoiHanInput.value = '';
+                }
+            }
         }
 
         function handleXepLoaiChangeKhac(selectElement) { const inputKhac = selectElement.nextElementSibling; if (selectElement.value === "Khác") inputKhac.style.display = "block"; else { inputKhac.style.display = "none"; inputKhac.value = ""; } }
@@ -662,20 +721,32 @@
             const mảngKyLuat = [];
 
             if (coKyLuat) {
-                const cacKhoiKyLuat = document.querySelectorAll('#kyLuatContainer .ky-luat-card');
-                cacKhoiKyLuat.forEach((khoi, index) => {
-                    const inputs = khoi.querySelectorAll('input');
-                    const selects = khoi.querySelectorAll('select');
+                const cacDongKyLuat = document.querySelectorAll('#kyLuatContainer tr');
+                cacDongKyLuat.forEach((row, index) => {
+                    const inputs = row.querySelectorAll('input');
+                    const selects = row.querySelectorAll('select');
                     
+                    const nam = inputs[0] ? inputs[0].value.trim() : '';
                     const lyDo = inputs[1] ? inputs[1].value.trim() : '';
+                    const xepLoaiKhac = inputs[2] ? inputs[2].value.trim() : '';
+                    const tuNgay = inputs[3] ? (inputs[3].value ? formatDate(inputs[3].value) : '') : '';
+                    const denNgay = inputs[4] ? (inputs[4].value ? formatDate(inputs[4].value) : '') : '';
+                    const thoiHan = inputs[5] ? inputs[5].value : '';
+
+                    const mucKyLuat = selects[0] ? selects[0].value : '';
+                    let xepLoai = selects[1] ? selects[1].value : '';
+                    if (xepLoai === 'Khác') { xepLoai = xepLoaiKhac; }
+                    
                     if (lyDo) {
                         mảngKyLuat.push({
                             stt: index + 1,
+                            nam: nam,
                             lyDo: lyDo,
-                            mucKyLuat: selects[0] ? selects[0].value : '',
-                            tuNgay: inputs[3] ? (inputs[3].value ? formatDate(inputs[3].value) : '') : '',
-                            denNgay: inputs[4] ? (inputs[4].value ? formatDate(inputs[4].value) : '') : '',
-                            thoiHan: inputs[5] ? inputs[5].value : ''
+                            mucKyLuat: mucKyLuat,
+                            xepLoai: xepLoai,
+                            tuNgay: tuNgay,
+                            denNgay: denNgay,
+                            thoiHan: thoiHan
                         });
                     }
                 });

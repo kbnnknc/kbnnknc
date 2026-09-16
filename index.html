@@ -359,6 +359,9 @@
             capNhatDonViCongTac();
         }
 
+        // ==========================================
+        // CẬP NHẬT: HÀM CẬP NHẬT ĐƠN VỊ CÔNG TÁC (SỬ DỤNG DỮ LIỆU TỪ EXCEL)
+        // ==========================================
         function capNhatDonViCongTac() {
             const giaTriChon = document.getElementById("noiCongTac").value;
             const chucDanh = document.getElementById("chucDanh").value;
@@ -372,14 +375,28 @@
             const laTruongBan = (chucDanh === "Trưởng ban" || chucDanh === "Phó Trưởng ban");
 
             if (laLanhDao) {
-                if (phanLoai === "CQ") { cbDonVi.innerHTML = '<option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>'; } else if (phanLoai === "KV") { cbDonVi.innerHTML = `<option value="${giaTriChon}">${giaTriChon}</option>`; }
+                if (phanLoai === "CQ") { 
+                    cbDonVi.innerHTML = '<option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>'; 
+                } else if (phanLoai === "KV") { 
+                    cbDonVi.innerHTML = `<option value="${giaTriChon}">${giaTriChon}</option>`; 
+                }
             } else if (laVanPhong && phanLoai === "CQ") {
                 cbDonVi.innerHTML = '<option value="Văn phòng KBNN">Văn phòng KBNN</option>';
             } else {
-                duLieu[phanLoai].donVi.forEach(item => {
-                    if (laTruongBan && phanLoai === "CQ" && item === "Văn phòng KBNN") return; 
-                    let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
-                });
+                // KIỂM TRA: Nếu là khu vực và có dữ liệu map từ Excel
+                if (phanLoai === "KV" && danhMucKBNN[giaTriChon] && danhMucKBNN[giaTriChon].length > 0) {
+                    danhMucKBNN[giaTriChon].forEach(item => {
+                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
+                    });
+                    // Bổ sung tùy chọn "Khác..."
+                    let optionKhac = document.createElement("option"); optionKhac.value = "Khác..."; optionKhac.text = "Khác..."; cbDonVi.appendChild(optionKhac);
+                } else {
+                    // Dùng mảng mặc định cho Cơ quan (CQ) hoặc fallback
+                    duLieu[phanLoai].donVi.forEach(item => {
+                        if (laTruongBan && phanLoai === "CQ" && item === "Văn phòng KBNN") return; 
+                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
+                    });
+                }
             }
             kiemTraTuyChonKhac(cbDonVi, 'donViKhacContainer');
         }
@@ -580,6 +597,10 @@
                 const tuNgay = new Date(tuNgayVal);
                 const denNgay = new Date(denNgayVal);
 
+                if (tuNgay.getFullYear() < 1000 || denNgay.getFullYear() < 1000) {
+                    return; 
+                }
+
                 if (denNgay >= tuNgay) {
                     let months = (denNgay.getFullYear() - tuNgay.getFullYear()) * 12;
                     months -= tuNgay.getMonth();
@@ -588,7 +609,7 @@
                     thoiHanInput.value = months > 0 ? months : 0;
                 } else {
                     alert("Đến ngày phải lớn hơn hoặc bằng Từ ngày.");
-                    element.value = '';
+                    element.value = ''; 
                     thoiHanInput.value = '';
                 }
             }
@@ -666,7 +687,7 @@
                 return thoiGianList.length > 0 ? thoiGianList.join(', ') : '';
             };
 
-            // HÀM TIỆN ÍCH (Phần IV.2): Định dạng ngày
+            // HÀM TIỆN ÍCH (Phần IV.2): Định dạng ngày từ yyyy-mm-dd sang dd/mm/yyyy
             function formatDate(dateString) {
                 const parts = dateString.split('-');
                 if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
@@ -696,7 +717,6 @@
                 }
             });
 
-            // --- PHẦN IV.1: Xử lý Khen thưởng ---
             const danhSachKhenThuong = [];
             const rowsKhenThuong = document.querySelectorAll('#khenThuongBody tr');
             rowsKhenThuong.forEach(row => {
@@ -704,12 +724,13 @@
                 if (cells.length > 1) {
                     const nam = cells[1].querySelector('input').value;
                     if (nam) { 
+                        const rawNgayQD = cells[4].querySelector('input').value;
                         danhSachKhenThuong.push({
                             stt: cells[0].textContent,
                             nam: nam,
                             noiDung: cells[2].querySelector('input').value,
                             soQD: cells[3].querySelector('input').value,
-                            ngayQD: cells[4].querySelector('input').value
+                            ngayQD: rawNgayQD ? formatDate(rawNgayQD) : ''
                         });
                     }
                 }
@@ -752,63 +773,48 @@
                 });
             }
 
-	    // --- XỬ LÝ NGÀY SINH & NGÀY HIỆN TẠI ---
-            // 1. Chuyển đổi định dạng Ngày sinh từ YYYY-MM-DD sang DD/MM/YYYY
+            // --- XỬ LÝ NGÀY SINH & NGÀY HIỆN TẠI ---
             const rawNgaySinh = document.getElementById('ngaySinh').value;
-            let ngaySinhFormat = rawNgaySinh; // Mặc định giữ nguyên nếu có lỗi
+            let ngaySinhFormat = rawNgaySinh; 
             if (rawNgaySinh) {
-                const parts = rawNgaySinh.split('-'); // Cắt chuỗi dựa vào dấu gạch ngang
+                const parts = rawNgaySinh.split('-'); 
                 if (parts.length === 3) {
-                    ngaySinhFormat = `${parts[2]}/${parts[1]}/${parts[0]}`; // Đảo lại vị trí
+                    ngaySinhFormat = `${parts[2]}/${parts[1]}/${parts[0]}`; 
                 }
             }
 
-            // 2. Lấy thời gian hiện tại của hệ thống
             const homNay = new Date();
-            // padStart(2, '0') giúp thêm số 0 ở đầu nếu ngày/tháng nhỏ hơn 10 (ví dụ: ngày 05)
             const ngayHT = String(homNay.getDate()).padStart(2, '0');
-            const thangHT = String(homNay.getMonth() + 1).padStart(2, '0'); // Tháng trong JS bắt đầu từ 0
+            const thangHT = String(homNay.getMonth() + 1).padStart(2, '0'); 
             const namHT = homNay.getFullYear();
 
-
-            // --- ĐÓNG GÓI DỮ LIỆU (Data Object) ---
+            // ==========================================
+            // CẬP NHẬT: THÊM HÀM .toUpperCase() CHO NƠI CÔNG TÁC VÀ ĐƠN VỊ CT
+            // ==========================================
             const dataMap = {
-                // Phần I
-                // Truyền ngày, tháng, năm hiện tại vào Word
                 ngayHienTai: ngayHT,
                 thangHienTai: thangHT,
                 namHienTai: namHT,
-                noiCongTac: document.getElementById('noiCongTac').value,
+                noiCongTac: (document.getElementById('noiCongTac').value || '').toUpperCase(),
                 diaDanh: document.getElementById('diaDanh').value,
                 hoTen: document.getElementById('hoTen').value,
                 gioiTinh: document.getElementById('gioiTinh').value,
-                
-                // Truyền biến ngày sinh đã được định dạng lại
                 ngaySinh: ngaySinhFormat,
-                
                 danToc: document.getElementById('danToc').value,
                 queQuan: document.getElementById('queQuan').value,
                 noiO: document.getElementById('noiO').value,
                 chucDanh: layGiaTriThuc('chucDanh', 'chucDanhKhac'),
-                donViCT: layGiaTriThuc('donViCT', 'donViKhac'),
-                
-                // Phần II
+                donViCT: (layGiaTriThuc('donViCT', 'donViKhac') || '').toUpperCase(),
                 quaTrinh: danhSachQuaTrinh,
-
-                // Phần III
                 xuatSac: layChuoiThoiGian('container-a'),
                 tot: layChuoiThoiGian('container-b'),
                 hoanThanh: layChuoiThoiGian('container-c'),
                 khongHoanThanh: layChuoiThoiGian('container-d'),
                 khongXepLoai: (document.getElementById('group-e').style.display !== 'none') ? layChuoiThoiGian('container-e') : '',
-
-                // Phần IV.1
                 khenThuong: danhSachKhenThuong,
                 camKetKNC: document.getElementById('chkChuaNhan').checked 
                     ? "Cá nhân tôi chưa được tặng Kỷ niệm chương vì sự nghiệp Tài chính Việt Nam lần nào." 
                     : "Đã từng nhận (hoặc chưa xác nhận).",
-
-                // Phần IV.2
                 trangThaiKyLuat: coKyLuat ? "Có:" : "Không",
                 danhSachKyLuat: mảngKyLuat
             };
@@ -831,56 +837,87 @@
         }
 
         let diaGioiData = {};
+        // Biến lưu trữ dữ liệu KBNN từ file Excel
+        let danhMucKBNN = {};
+
+        // ==========================================
+        // CẬP NHẬT: HÀM ĐỌC FILE KHO BẠC
+        // ==========================================
+        async function docFileExcelKBNN() {
+            try {
+                const response = await fetch('Danh-muc-KBNN-khuvuc.xlsx');
+                const arrayBuffer = await response.arrayBuffer();
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                
+                jsonData.forEach(row => {
+                    const kv = row['Kho bạc Nhà nước khu vực'];
+                    const dv = row['Đơn vị công tác'];
+                    if (kv && dv) {
+                        const kvTrim = String(kv).trim();
+                        const dvTrim = String(dv).trim();
+                        if (!danhMucKBNN[kvTrim]) danhMucKBNN[kvTrim] = [];
+                        if (!danhMucKBNN[kvTrim].includes(dvTrim)) { 
+                            danhMucKBNN[kvTrim].push(dvTrim); 
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Lỗi đọc file Excel Danh-muc-KBNN-khuvuc:", error);
+            }
+        }
 
         $(document).ready(function() {
             $('.select-search').select2({ language: { noResults: function() { return "Không tìm thấy kết quả"; } } });
             docFileExcelDiaDanh();
+            docFileExcelKBNN(); // Gọi hàm đọc dữ liệu KBNN
             batSuKienThayDoi('qq'); 
             batSuKienThayDoi('no'); 
         });
 
         async function docFileExcelDiaDanh() {
-    		try {
-        	const response = await fetch('Danh-muc-Phuong-xa.xlsx');
-        	const arrayBuffer = await response.arrayBuffer();
-        	const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        	const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-        	const jsonData = XLSX.utils.sheet_to_json(worksheet);
+            try {
+            const response = await fetch('Danh-muc-Phuong-xa.xlsx');
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+            const jsonData = XLSX.utils.sheet_to_json(worksheet);
         
-        	jsonData.forEach(row => {
-            	const tinh = row['Tên tỉnh/mới']; const xa = row['Tên Phường/Xã mới'];
-            	if (tinh && xa) {
-                	const tinhTrim = String(tinh).trim(); const xaTrim = String(xa).trim();
-                	if (!diaGioiData[tinhTrim]) diaGioiData[tinhTrim] = [];
-                	if (!diaGioiData[tinhTrim].includes(xaTrim)) { diaGioiData[tinhTrim].push(xaTrim); }
-            	}
-        	});
-        	doDuLieuTinh('qqTinh'); doDuLieuTinh('noTinh');
-    	} catch (error) {
-        	console.error("Lỗi đọc file Excel:", error);
-        	alert("Lỗi tải danh mục Tỉnh/Xã. Hãy đảm bảo bạn đang chạy file HTML thông qua một Local Server (như Live Server trên VS Code).");
-    	}
-	}
+            jsonData.forEach(row => {
+                const tinh = row['Tên tỉnh/mới']; const xa = row['Tên Phường/Xã mới'];
+                if (tinh && xa) {
+                    const tinhTrim = String(tinh).trim(); const xaTrim = String(xa).trim();
+                    if (!diaGioiData[tinhTrim]) diaGioiData[tinhTrim] = [];
+                    if (!diaGioiData[tinhTrim].includes(xaTrim)) { diaGioiData[tinhTrim].push(xaTrim); }
+                }
+            });
+            doDuLieuTinh('qqTinh'); doDuLieuTinh('noTinh');
+        } catch (error) {
+            console.error("Lỗi đọc file Excel:", error);
+            alert("Lỗi tải danh mục Tỉnh/Xã. Hãy đảm bảo bạn đang chạy file HTML thông qua một Local Server (như Live Server trên VS Code).");
+        }
+    }
 
         function doDuLieuTinh(selectId) {
             const select = $('#' + selectId); select.empty().append('<option value="">-- Chọn Tỉnh/Thành phố --</option>');
-    		Object.keys(diaGioiData).sort((a, b) => a.localeCompare(b, 'vi')).forEach(tinh => { select.append(new Option(tinh, tinh, false, false)); });
-    		select.trigger('change.select2');
-		}
+            Object.keys(diaGioiData).sort((a, b) => a.localeCompare(b, 'vi')).forEach(tinh => { select.append(new Option(tinh, tinh, false, false)); });
+            select.trigger('change.select2');
+        }
 
         function batSuKienThayDoi(loai) {
-    		const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh'; const xaId = loai === 'qq' ? '#qqXa' : '#noXa'; const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
-    		$(tinhId).on('change', function() {
-        		const selectedTinh = $(this).val(); const xaSelect = $(xaId);
-        		xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
-        		if (selectedTinh && diaGioiData[selectedTinh]) {
-            		xaSelect.prop('disabled', false); 
-            		diaGioiData[selectedTinh].sort((a, b) => a.localeCompare(b, 'vi')).forEach(xa => { xaSelect.append(new Option(xa, xa, false, false)); });
-        		} else { xaSelect.prop('disabled', true); }
-        		xaSelect.trigger('change.select2'); capNhatInputAn(tinhId, xaId, hiddenId);
-    		});
-    		$(xaId).on('change', function() { capNhatInputAn(tinhId, xaId, hiddenId); });
-		}
+            const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh'; const xaId = loai === 'qq' ? '#qqXa' : '#noXa'; const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
+            $(tinhId).on('change', function() {
+                const selectedTinh = $(this).val(); const xaSelect = $(xaId);
+                xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
+                if (selectedTinh && diaGioiData[selectedTinh]) {
+                    xaSelect.prop('disabled', false); 
+                    diaGioiData[selectedTinh].sort((a, b) => a.localeCompare(b, 'vi')).forEach(xa => { xaSelect.append(new Option(xa, xa, false, false)); });
+                } else { xaSelect.prop('disabled', true); }
+                xaSelect.trigger('change.select2'); capNhatInputAn(tinhId, xaId, hiddenId);
+            });
+            $(xaId).on('change', function() { capNhatInputAn(tinhId, xaId, hiddenId); });
+        }
 
         function capNhatInputAn(tinhId, xaId, hiddenId) {
             const tinhVal = $(tinhId).val(); const xaVal = $(xaId).val(); const hiddenInput = document.getElementById(hiddenId);

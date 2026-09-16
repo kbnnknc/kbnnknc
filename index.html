@@ -303,6 +303,33 @@
             'Kho bạc Nhà nước khu vực XVIII': 'Tây Ninh', 'Kho bạc Nhà nước khu vực XIX': 'Cần Thơ', 'Kho bạc Nhà nước khu vực XX': 'An Giang'
         };
 
+        // ==========================================
+        // DỮ LIỆU CỨNG TỪ FILE EXCEL
+        // Đảm bảo chạy 100% không bị lỗi CORS chặn file
+        // ==========================================
+        const danhMucKBNN = {
+            "Kho bạc Nhà nước khu vực I": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17"],
+            "Kho bạc Nhà nước khu vực II": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20"],
+            "Kho bạc Nhà nước khu vực III": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Nghiệp vụ 6", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18"],
+            "Kho bạc Nhà nước khu vực IV": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6"],
+            "Kho bạc Nhà nước khu vực V": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10"],
+            "Kho bạc Nhà nước khu vực VI": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Nghiệp vụ 6", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10"],
+            "Kho bạc Nhà nước khu vực VII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15"],
+            "Kho bạc Nhà nước khu vực VIII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20", "Phòng Giao dịch số 21", "Phòng Giao dịch số 22", "Phòng Giao dịch số 23", "Phòng Giao dịch số 24", "Phòng Giao dịch số 25", "Phòng Giao dịch số 26", "Phòng Giao dịch số 27"],
+            "Kho bạc Nhà nước khu vực IX": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15"],
+            "Kho bạc Nhà nước khu vực X": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15"],
+            "Kho bạc Nhà nước khu vực XI": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20", "Phòng Giao dịch số 21", "Phòng Giao dịch số 22", "Phòng Giao dịch số 23", "Phòng Giao dịch số 24", "Phòng Giao dịch số 25", "Phòng Giao dịch số 26", "Phòng Giao dịch số 27"],
+            "Kho bạc Nhà nước khu vực XII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13"],
+            "Kho bạc Nhà nước khu vực XIII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17"],
+            "Kho bạc Nhà nước khu vực XIV": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Nghiệp vụ 5", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19"],
+            "Kho bạc Nhà nước khu vực XV": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20", "Phòng Giao dịch số 21", "Phòng Giao dịch số 22", "Phòng Giao dịch số 23", "Phòng Giao dịch số 24", "Phòng Giao dịch số 25", "Phòng Giao dịch số 26", "Phòng Giao dịch số 27", "Phòng Giao dịch số 28", "Phòng Giao dịch số 29"],
+            "Kho bạc Nhà nước khu vực XVI": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15"],
+            "Kho bạc Nhà nước khu vực XVII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11"],
+            "Kho bạc Nhà nước khu vực XVIII": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20"],
+            "Kho bạc Nhà nước khu vực XIX": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20", "Phòng Giao dịch số 21", "Phòng Giao dịch số 22", "Phòng Giao dịch số 23", "Phòng Giao dịch số 24", "Phòng Giao dịch số 25", "Phòng Giao dịch số 26", "Phòng Giao dịch số 27"],
+            "Kho bạc Nhà nước khu vực XX": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19"]
+        };
+
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -360,12 +387,14 @@
         }
 
         // ==========================================
-        // CẬP NHẬT: HÀM CẬP NHẬT ĐƠN VỊ CÔNG TÁC (SỬ DỤNG DỮ LIỆU TỪ EXCEL)
+        // CẬP NHẬT: HÀM CẬP NHẬT ĐƠN VỊ CÔNG TÁC (CHỈ LẤY TỪ EXCEL, BỎ "Khác...")
         // ==========================================
         function capNhatDonViCongTac() {
             const giaTriChon = document.getElementById("noiCongTac").value;
             const chucDanh = document.getElementById("chucDanh").value;
             const cbDonVi = document.getElementById("donViCT");
+            
+            // Xóa dữ liệu cũ và thiết lập tùy chọn mặc định
             cbDonVi.innerHTML = '<option value="">-- Chọn đơn vị --</option>';
             if (giaTriChon === "") return;
 
@@ -375,29 +404,39 @@
             const laTruongBan = (chucDanh === "Trưởng ban" || chucDanh === "Phó Trưởng ban");
 
             if (laLanhDao) {
+                // Nếu là Lãnh đạo, đơn vị công tác chính là nơi công tác
                 if (phanLoai === "CQ") { 
                     cbDonVi.innerHTML = '<option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>'; 
                 } else if (phanLoai === "KV") { 
                     cbDonVi.innerHTML = `<option value="${giaTriChon}">${giaTriChon}</option>`; 
                 }
             } else if (laVanPhong && phanLoai === "CQ") {
+                // Xử lý riêng cho chức danh Văn phòng tại Cơ quan
                 cbDonVi.innerHTML = '<option value="Văn phòng KBNN">Văn phòng KBNN</option>';
             } else {
-                // KIỂM TRA: Nếu là khu vực và có dữ liệu map từ Excel
-                if (phanLoai === "KV" && danhMucKBNN[giaTriChon] && danhMucKBNN[giaTriChon].length > 0) {
+                // KIỂM TRA: Nếu là khu vực và dùng dữ liệu từ danhMucKBNN (Excel hardcoded)
+                if (phanLoai === "KV" && danhMucKBNN[giaTriChon]) {
+                    // Chỉ nạp các Phòng từ danh sách Excel
                     danhMucKBNN[giaTriChon].forEach(item => {
-                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
+                        let option = document.createElement("option"); 
+                        option.value = item; 
+                        option.text = item; 
+                        cbDonVi.appendChild(option);
                     });
-                    // Bổ sung tùy chọn "Khác..."
-                    let optionKhac = document.createElement("option"); optionKhac.value = "Khác..."; optionKhac.text = "Khác..."; cbDonVi.appendChild(optionKhac);
+                    // KHÔNG THÊM tùy chọn "Khác..." ở đây nữa
                 } else {
-                    // Dùng mảng mặc định cho Cơ quan (CQ) hoặc fallback
+                    // Dùng mảng mặc định cho Cơ quan (CQ)
                     duLieu[phanLoai].donVi.forEach(item => {
                         if (laTruongBan && phanLoai === "CQ" && item === "Văn phòng KBNN") return; 
-                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
+                        let option = document.createElement("option"); 
+                        option.value = item; 
+                        option.text = item; 
+                        cbDonVi.appendChild(option);
                     });
                 }
             }
+            
+            // Gọi hàm kiểm tra để ẩn ô nhập phụ (nếu có)
             kiemTraTuyChonKhac(cbDonVi, 'donViKhacContainer');
         }
 
@@ -788,9 +827,6 @@
             const thangHT = String(homNay.getMonth() + 1).padStart(2, '0'); 
             const namHT = homNay.getFullYear();
 
-            // ==========================================
-            // CẬP NHẬT: THÊM HÀM .toUpperCase() CHO NƠI CÔNG TÁC VÀ ĐƠN VỊ CT
-            // ==========================================
             const dataMap = {
                 ngayHienTai: ngayHT,
                 thangHienTai: thangHT,
@@ -837,41 +873,10 @@
         }
 
         let diaGioiData = {};
-        // Biến lưu trữ dữ liệu KBNN từ file Excel
-        let danhMucKBNN = {};
-
-        // ==========================================
-        // CẬP NHẬT: HÀM ĐỌC FILE KHO BẠC
-        // ==========================================
-        async function docFileExcelKBNN() {
-            try {
-                const response = await fetch('Danh-muc-KBNN-khuvuc.xlsx');
-                const arrayBuffer = await response.arrayBuffer();
-                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
-                
-                jsonData.forEach(row => {
-                    const kv = row['Kho bạc Nhà nước khu vực'];
-                    const dv = row['Đơn vị công tác'];
-                    if (kv && dv) {
-                        const kvTrim = String(kv).trim();
-                        const dvTrim = String(dv).trim();
-                        if (!danhMucKBNN[kvTrim]) danhMucKBNN[kvTrim] = [];
-                        if (!danhMucKBNN[kvTrim].includes(dvTrim)) { 
-                            danhMucKBNN[kvTrim].push(dvTrim); 
-                        }
-                    }
-                });
-            } catch (error) {
-                console.error("Lỗi đọc file Excel Danh-muc-KBNN-khuvuc:", error);
-            }
-        }
 
         $(document).ready(function() {
             $('.select-search').select2({ language: { noResults: function() { return "Không tìm thấy kết quả"; } } });
             docFileExcelDiaDanh();
-            docFileExcelKBNN(); // Gọi hàm đọc dữ liệu KBNN
             batSuKienThayDoi('qq'); 
             batSuKienThayDoi('no'); 
         });

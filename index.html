@@ -144,7 +144,7 @@
                             <option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option><option value="Kho bạc Nhà nước khu vực I">Kho bạc Nhà nước khu vực I</option><option value="Kho bạc Nhà nước khu vực II">Kho bạc Nhà nước khu vực II</option><option value="Kho bạc Nhà nước khu vực III">Kho bạc Nhà nước khu vực III</option><option value="Kho bạc Nhà nước khu vực IV">Kho bạc Nhà nước khu vực IV</option><option value="Kho bạc Nhà nước khu vực V">Kho bạc Nhà nước khu vực V</option><option value="Kho bạc Nhà nước khu vực VI">Kho bạc Nhà nước khu vực VI</option><option value="Kho bạc Nhà nước khu vực VII">Kho bạc Nhà nước khu vực VII</option><option value="Kho bạc Nhà nước khu vực VIII">Kho bạc Nhà nước khu vực VIII</option><option value="Kho bạc Nhà nước khu vực IX">Kho bạc Nhà nước khu vực IX</option><option value="Kho bạc Nhà nước khu vực X">Kho bạc Nhà nước khu vực X</option><option value="Kho bạc Nhà nước khu vực XI">Kho bạc Nhà nước khu vực XI</option><option value="Kho bạc Nhà nước khu vực XII">Kho bạc Nhà nước khu vực XII</option><option value="Kho bạc Nhà nước khu vực XIII">Kho bạc Nhà nước khu vực XIII</option><option value="Kho bạc Nhà nước khu vực XIV">Kho bạc Nhà nước khu vực XIV</option><option value="Kho bạc Nhà nước khu vực XV">Kho bạc Nhà nước khu vực XV</option><option value="Kho bạc Nhà nước khu vực XVI">Kho bạc Nhà nước khu vực XVI</option><option value="Kho bạc Nhà nước khu vực XVII">Kho bạc Nhà nước khu vực XVII</option><option value="Kho bạc Nhà nước khu vực XVIII">Kho bạc Nhà nước khu vực XVIII</option><option value="Kho bạc Nhà nước khu vực XIX">Kho bạc Nhà nước khu vực XIX</option><option value="Kho bạc Nhà nước khu vực XX">Kho bạc Nhà nước khu vực XX</option>
                         </select>
                     </div>
-                    <!-- ĐÃ SỬA: Thêm style="display: none;" để ẩn trường Địa danh -->
+                    <!-- Đã ẩn Địa danh -->
                     <div class="form-group" style="display: none;">
                         <label>Địa danh (Tỉnh/Thành phố trực thuộc TƯ):</label>
                         <input type="text" id="diaDanh" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed;" placeholder="Hệ thống tự động hiển thị...">
@@ -307,10 +307,6 @@
             'Kho bạc Nhà nước khu vực XVIII': 'Tây Ninh', 'Kho bạc Nhà nước khu vực XIX': 'Cần Thơ', 'Kho bạc Nhà nước khu vực XX': 'An Giang'
         };
 
-        // ==========================================
-        // DỮ LIỆU CỨNG TỪ FILE EXCEL
-        // Đảm bảo chạy 100% không bị lỗi CORS chặn file
-        // ==========================================
         const danhMucKBNN = {
             "Kho bạc Nhà nước khu vực I": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17"],
             "Kho bạc Nhà nước khu vực II": ["Phòng Tổ chức - Hành chính", "Phòng Kiểm tra", "Phòng Tài vụ - Quản trị", "Phòng Hỗ trợ Giao dịch và Công nghệ thông tin", "Phòng Kế toán Nhà nước", "Phòng Nghiệp vụ 1", "Phòng Nghiệp vụ 2", "Phòng Nghiệp vụ 3", "Phòng Nghiệp vụ 4", "Phòng Giao dịch số 1", "Phòng Giao dịch số 2", "Phòng Giao dịch số 3", "Phòng Giao dịch số 4", "Phòng Giao dịch số 5", "Phòng Giao dịch số 6", "Phòng Giao dịch số 7", "Phòng Giao dịch số 8", "Phòng Giao dịch số 9", "Phòng Giao dịch số 10", "Phòng Giao dịch số 11", "Phòng Giao dịch số 12", "Phòng Giao dịch số 13", "Phòng Giao dịch số 14", "Phòng Giao dịch số 15", "Phòng Giao dịch số 16", "Phòng Giao dịch số 17", "Phòng Giao dịch số 18", "Phòng Giao dịch số 19", "Phòng Giao dịch số 20"],
@@ -390,15 +386,11 @@
             capNhatDonViCongTac();
         }
 
-        // ==========================================
-        // CẬP NHẬT: HÀM CẬP NHẬT ĐƠN VỊ CÔNG TÁC (CHỈ LẤY TỪ EXCEL, BỎ "Khác...")
-        // ==========================================
         function capNhatDonViCongTac() {
             const giaTriChon = document.getElementById("noiCongTac").value;
             const chucDanh = document.getElementById("chucDanh").value;
             const cbDonVi = document.getElementById("donViCT");
             
-            // Xóa dữ liệu cũ và thiết lập tùy chọn mặc định
             cbDonVi.innerHTML = '<option value="">-- Chọn đơn vị --</option>';
             if (giaTriChon === "") return;
 
@@ -408,39 +400,25 @@
             const laTruongBan = (chucDanh === "Trưởng ban" || chucDanh === "Phó Trưởng ban");
 
             if (laLanhDao) {
-                // Nếu là Lãnh đạo, đơn vị công tác chính là nơi công tác
                 if (phanLoai === "CQ") { 
                     cbDonVi.innerHTML = '<option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option>'; 
                 } else if (phanLoai === "KV") { 
                     cbDonVi.innerHTML = `<option value="${giaTriChon}">${giaTriChon}</option>`; 
                 }
             } else if (laVanPhong && phanLoai === "CQ") {
-                // Xử lý riêng cho chức danh Văn phòng tại Cơ quan
                 cbDonVi.innerHTML = '<option value="Văn phòng KBNN">Văn phòng KBNN</option>';
             } else {
-                // KIỂM TRA: Nếu là khu vực và dùng dữ liệu từ danhMucKBNN (Excel hardcoded)
                 if (phanLoai === "KV" && danhMucKBNN[giaTriChon]) {
-                    // Chỉ nạp các Phòng từ danh sách Excel
                     danhMucKBNN[giaTriChon].forEach(item => {
-                        let option = document.createElement("option"); 
-                        option.value = item; 
-                        option.text = item; 
-                        cbDonVi.appendChild(option);
+                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
                     });
-                    // KHÔNG THÊM tùy chọn "Khác..." ở đây nữa
                 } else {
-                    // Dùng mảng mặc định cho Cơ quan (CQ)
                     duLieu[phanLoai].donVi.forEach(item => {
                         if (laTruongBan && phanLoai === "CQ" && item === "Văn phòng KBNN") return; 
-                        let option = document.createElement("option"); 
-                        option.value = item; 
-                        option.text = item; 
-                        cbDonVi.appendChild(option);
+                        let option = document.createElement("option"); option.value = item; option.text = item; cbDonVi.appendChild(option);
                     });
                 }
             }
-            
-            // Gọi hàm kiểm tra để ẩn ô nhập phụ (nếu có)
             kiemTraTuyChonKhac(cbDonVi, 'donViKhacContainer');
         }
 
@@ -597,6 +575,7 @@
             const count = tbody.children.length + 1; 
             const newRow = document.createElement('tr');
             
+            // Đã xóa thuộc tính readonly, style mờ và sự kiện tự động tính toán
             newRow.innerHTML = `
                 <td class="stt-cell">${count}</td>
                 <td><input type="number" min="1980" max="2100" placeholder="YYYY" onchange="validateBasicYear(this)"></td>
@@ -618,9 +597,9 @@
                     </select>
                     <input type="text" class="xl-khac-input" placeholder="Xếp loại khác" style="display: none; margin-top: 5px; width: 100%;">
                 </td>
-                <td><input type="date" class="kl-tu-ngay" onchange="tinhThangKyLuat(this)"></td>
-                <td><input type="date" class="kl-den-ngay" onchange="tinhThangKyLuat(this)"></td>
-                <td><input type="number" class="kl-thoi-han" placeholder="0" min="0" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed; text-align: center;"></td>
+                <td><input type="date" class="kl-tu-ngay"></td>
+                <td><input type="date" class="kl-den-ngay"></td>
+                <td><input type="number" class="kl-thoi-han" placeholder="0" min="0" style="text-align: center; width: 100%; padding: 8px; box-sizing: border-box;"></td>
             `;
             tbody.appendChild(newRow);
         }
@@ -628,34 +607,6 @@
         function removeLastRowKyLuat() { 
             const t = document.getElementById('kyLuatContainer'); 
             if(t.children.length > 0) t.removeChild(t.lastElementChild); 
-        }
-
-        function tinhThangKyLuat(element) {
-            const row = element.closest('tr');
-            const tuNgayVal = row.querySelector('.kl-tu-ngay').value;
-            const denNgayVal = row.querySelector('.kl-den-ngay').value;
-            const thoiHanInput = row.querySelector('.kl-thoi-han');
-
-            if (tuNgayVal && denNgayVal) {
-                const tuNgay = new Date(tuNgayVal);
-                const denNgay = new Date(denNgayVal);
-
-                if (tuNgay.getFullYear() < 1000 || denNgay.getFullYear() < 1000) {
-                    return; 
-                }
-
-                if (denNgay >= tuNgay) {
-                    let months = (denNgay.getFullYear() - tuNgay.getFullYear()) * 12;
-                    months -= tuNgay.getMonth();
-                    months += denNgay.getMonth();
-                    
-                    thoiHanInput.value = months > 0 ? months : 0;
-                } else {
-                    alert("Đến ngày phải lớn hơn hoặc bằng Từ ngày.");
-                    element.value = ''; 
-                    thoiHanInput.value = '';
-                }
-            }
         }
 
         function handleXepLoaiChangeKhac(selectElement) { const inputKhac = selectElement.nextElementSibling; if (selectElement.value === "Khác") inputKhac.style.display = "block"; else { inputKhac.style.display = "none"; inputKhac.value = ""; } }
@@ -698,17 +649,12 @@
             kiemTraDieuKienHoanThanh();
         });
 
-        // =====================================================================
-        // HÀM CHÍNH: XUẤT FILE DOCX
-        // =====================================================================
         function xuatFileDocx() {
-            // HÀM TIỆN ÍCH: Lấy giá trị từ select hoặc input "Khác..."
             const layGiaTriThuc = (idSelect, idKhac) => {
                 const select = document.getElementById(idSelect);
                 return select.value === 'Khác...' ? document.getElementById(idKhac).value : select.value;
             };
 
-            // HÀM TIỆN ÍCH (Phần III): Nối chuỗi thời gian
             const layChuoiThoiGian = (containerId) => {
                 const container = document.getElementById(containerId); 
                 if (!container) return '';
@@ -730,14 +676,12 @@
                 return thoiGianList.length > 0 ? thoiGianList.join(', ') : '';
             };
 
-            // HÀM TIỆN ÍCH (Phần IV.2): Định dạng ngày từ yyyy-mm-dd sang dd/mm/yyyy
             function formatDate(dateString) {
                 const parts = dateString.split('-');
                 if(parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
                 return dateString;
             }
 
-            // --- PHẦN II: Xử lý Quá trình công tác ---
             const danhSachQuaTrinh = [];
             const cacDongQuaTrinh = document.querySelectorAll('#tableBodyPart2 tr');
             cacDongQuaTrinh.forEach(row => {
@@ -779,7 +723,6 @@
                 }
             });
 
-            // --- PHẦN IV.2: Xử lý Kỷ luật ---
             const textTrangThaiKyLuat = document.getElementById('textTrangThaiKyLuat');
             const coKyLuat = textTrangThaiKyLuat && textTrangThaiKyLuat.textContent.trim() === 'Có.';
             const mảngKyLuat = [];
@@ -816,7 +759,6 @@
                 });
             }
 
-            // --- XỬ LÝ NGÀY SINH & NGÀY HIỆN TẠI ---
             const rawNgaySinh = document.getElementById('ngaySinh').value;
             let ngaySinhFormat = rawNgaySinh; 
             if (rawNgaySinh) {
@@ -830,8 +772,6 @@
             const ngayHT = String(homNay.getDate()).padStart(2, '0');
             const thangHT = String(homNay.getMonth() + 1).padStart(2, '0'); 
             const namHT = homNay.getFullYear();
-
-            // ĐÃ SỬA: Thêm biến donViCTThuong, tongQuaTrinh và tongKNC vào MAP
             const donViGoc = layGiaTriThuc('donViCT', 'donViKhac') || '';
 
             const dataMap = {
@@ -839,7 +779,7 @@
                 thangHienTai: thangHT,
                 namHienTai: namHT,
                 noiCongTac: (document.getElementById('noiCongTac').value || '').toUpperCase(),
-		noiCongTacThuong: document.getElementById('noiCongTac').value || '',
+                noiCongTacThuong: document.getElementById('noiCongTac').value || '',
                 diaDanh: document.getElementById('diaDanh').value,
                 hoTen: document.getElementById('hoTen').value,
                 gioiTinh: document.getElementById('gioiTinh').value,
@@ -848,10 +788,10 @@
                 queQuan: document.getElementById('queQuan').value,
                 noiO: document.getElementById('noiO').value,
                 chucDanh: layGiaTriThuc('chucDanh', 'chucDanhKhac'),
-                donViCT: donViGoc.toUpperCase(), // Vị trí 1: Bắt buộc IN HOA
-                donViCTThuong: donViGoc,         // Vị trí 2: Giữ nguyên CHỮ THƯỜNG
-                tongQuaTrinh: document.getElementById('tongQuaTrinh').textContent, // Lấy tổng thời gian quá trình hiển thị
-                tongKNC: document.getElementById('tongKNC').textContent,           // Lấy tổng thời gian xét KNC hiển thị
+                donViCT: donViGoc.toUpperCase(), 
+                donViCTThuong: donViGoc,         
+                tongQuaTrinh: document.getElementById('tongQuaTrinh').textContent, 
+                tongKNC: document.getElementById('tongKNC').textContent,           
                 quaTrinh: danhSachQuaTrinh,
                 xuatSac: layChuoiThoiGian('container-a'),
                 tot: layChuoiThoiGian('container-b'),
@@ -866,7 +806,6 @@
                 danhSachKyLuat: mảngKyLuat
             };
 
-            // --- XUẤT FILE DOCX ---
             PizZipUtils.getBinaryContent("mau_bao_cao.docx", function(error, content) {
                 if (error) {
                     alert("Không tìm thấy file mẫu 'mau_bao_cao.docx'. Hãy chắc chắn bạn đã chạy trên localhost và để file cùng thư mục!");

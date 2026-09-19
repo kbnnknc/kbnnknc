@@ -127,13 +127,13 @@
                     <div class="form-group"><label>Dân tộc:<span class="text-danger">*</span></label><input type="text" id="danToc" placeholder="..." class="required-field"></div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group" style="flex: 1;"><label>Quê quán (Tỉnh/Thành phố trực thuộc TƯ):<span class="text-danger">*</span></label><select id="qqTinh" class="select-search" style="width: 100%;"><option value="">-- Chọn Tỉnh/Thành phố --</option></select></div>
-                    <div class="form-group" style="flex: 1;"><label>Quê quán (Xã/Phường/Đặc khu):<span class="text-danger">*</span></label><select id="qqXa" class="select-search" style="width: 100%;" disabled><option value="">-- Chọn Xã/Phường/Đặc khu --</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Tỉnh/Thành phố trực thuộc TƯ (Quê quán):<span class="text-danger">*</span></label><select id="qqTinh" class="select-search" style="width: 100%;"><option value="">-- Chọn Tỉnh/Thành phố --</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Xã/Phường/Đặc khu (Quê quán):<span class="text-danger">*</span></label><select id="qqXa" class="select-search" style="width: 100%;" disabled><option value="">-- Chọn Xã/Phường/Đặc khu --</option></select></div>
                     <input type="hidden" id="queQuan" class="required-field" value="">
                 </div>
                 <div class="form-row">
-                    <div class="form-group" style="flex: 1;"><label>Nơi ở (Tỉnh/Thành phố trực thuộc TƯ):<span class="text-danger">*</span></label><select id="noTinh" class="select-search" style="width: 100%;"><option value="">-- Chọn Tỉnh/Thành phố --</option></select></div>
-                    <div class="form-group" style="flex: 1;"><label>Nơi ở (Xã/Phường/Đặc khu):<span class="text-danger">*</span></label><select id="noXa" class="select-search" style="width: 100%;" disabled><option value="">-- Chọn Xã/Phường/Đặc khu --</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Tỉnh/Thành phố trực thuộc TƯ (Nơi ở):<span class="text-danger">*</span></label><select id="noTinh" class="select-search" style="width: 100%;"><option value="">-- Chọn Tỉnh/Thành phố --</option></select></div>
+                    <div class="form-group" style="flex: 1;"><label>Xã/Phường/Đặc khu (Nơi ở):<span class="text-danger">*</span></label><select id="noXa" class="select-search" style="width: 100%;" disabled><option value="">-- Chọn Xã/Phường/Đặc khu --</option></select></div>
                     <input type="hidden" id="noiO" class="required-field" value="">
                 </div>
                 <div class="form-row">
@@ -144,7 +144,11 @@
                             <option value="Kho bạc Nhà nước">Kho bạc Nhà nước</option><option value="Kho bạc Nhà nước khu vực I">Kho bạc Nhà nước khu vực I</option><option value="Kho bạc Nhà nước khu vực II">Kho bạc Nhà nước khu vực II</option><option value="Kho bạc Nhà nước khu vực III">Kho bạc Nhà nước khu vực III</option><option value="Kho bạc Nhà nước khu vực IV">Kho bạc Nhà nước khu vực IV</option><option value="Kho bạc Nhà nước khu vực V">Kho bạc Nhà nước khu vực V</option><option value="Kho bạc Nhà nước khu vực VI">Kho bạc Nhà nước khu vực VI</option><option value="Kho bạc Nhà nước khu vực VII">Kho bạc Nhà nước khu vực VII</option><option value="Kho bạc Nhà nước khu vực VIII">Kho bạc Nhà nước khu vực VIII</option><option value="Kho bạc Nhà nước khu vực IX">Kho bạc Nhà nước khu vực IX</option><option value="Kho bạc Nhà nước khu vực X">Kho bạc Nhà nước khu vực X</option><option value="Kho bạc Nhà nước khu vực XI">Kho bạc Nhà nước khu vực XI</option><option value="Kho bạc Nhà nước khu vực XII">Kho bạc Nhà nước khu vực XII</option><option value="Kho bạc Nhà nước khu vực XIII">Kho bạc Nhà nước khu vực XIII</option><option value="Kho bạc Nhà nước khu vực XIV">Kho bạc Nhà nước khu vực XIV</option><option value="Kho bạc Nhà nước khu vực XV">Kho bạc Nhà nước khu vực XV</option><option value="Kho bạc Nhà nước khu vực XVI">Kho bạc Nhà nước khu vực XVI</option><option value="Kho bạc Nhà nước khu vực XVII">Kho bạc Nhà nước khu vực XVII</option><option value="Kho bạc Nhà nước khu vực XVIII">Kho bạc Nhà nước khu vực XVIII</option><option value="Kho bạc Nhà nước khu vực XIX">Kho bạc Nhà nước khu vực XIX</option><option value="Kho bạc Nhà nước khu vực XX">Kho bạc Nhà nước khu vực XX</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Địa danh (Tỉnh/Thành phố trực thuộc TƯ):</label><input type="text" id="diaDanh" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed;" placeholder="Hệ thống tự động hiển thị..."></div>
+                    <!-- ĐÃ SỬA: Thêm style="display: none;" để ẩn trường Địa danh -->
+                    <div class="form-group" style="display: none;">
+                        <label>Địa danh (Tỉnh/Thành phố trực thuộc TƯ):</label>
+                        <input type="text" id="diaDanh" readonly style="background-color: #e9ecef; color: #555; cursor: not-allowed;" placeholder="Hệ thống tự động hiển thị...">
+                    </div>
                 </div>
                 <div class="form-row">        
                     <div class="form-group">
@@ -827,11 +831,15 @@
             const thangHT = String(homNay.getMonth() + 1).padStart(2, '0'); 
             const namHT = homNay.getFullYear();
 
+            // ĐÃ SỬA: Thêm biến donViCTThuong, tongQuaTrinh và tongKNC vào MAP
+            const donViGoc = layGiaTriThuc('donViCT', 'donViKhac') || '';
+
             const dataMap = {
                 ngayHienTai: ngayHT,
                 thangHienTai: thangHT,
                 namHienTai: namHT,
                 noiCongTac: (document.getElementById('noiCongTac').value || '').toUpperCase(),
+		noiCongTacThuong: document.getElementById('noiCongTac').value || '',
                 diaDanh: document.getElementById('diaDanh').value,
                 hoTen: document.getElementById('hoTen').value,
                 gioiTinh: document.getElementById('gioiTinh').value,
@@ -840,7 +848,10 @@
                 queQuan: document.getElementById('queQuan').value,
                 noiO: document.getElementById('noiO').value,
                 chucDanh: layGiaTriThuc('chucDanh', 'chucDanhKhac'),
-                donViCT: (layGiaTriThuc('donViCT', 'donViKhac') || '').toUpperCase(),
+                donViCT: donViGoc.toUpperCase(), // Vị trí 1: Bắt buộc IN HOA
+                donViCTThuong: donViGoc,         // Vị trí 2: Giữ nguyên CHỮ THƯỜNG
+                tongQuaTrinh: document.getElementById('tongQuaTrinh').textContent, // Lấy tổng thời gian quá trình hiển thị
+                tongKNC: document.getElementById('tongKNC').textContent,           // Lấy tổng thời gian xét KNC hiển thị
                 quaTrinh: danhSachQuaTrinh,
                 xuatSac: layChuoiThoiGian('container-a'),
                 tot: layChuoiThoiGian('container-b'),
@@ -874,8 +885,7 @@
 
         let diaGioiData = {};
 
-        $(document).ready(function() {
-            $('.select-search').select2({ language: { noResults: function() { return "Không tìm thấy kết quả"; } } });
+        $(document).ready(function() {$('.select-search').select2({ language: { noResults: function() { return "Không tìm thấy kết quả"; } } });
             docFileExcelDiaDanh();
             batSuKienThayDoi('qq'); 
             batSuKienThayDoi('no'); 
@@ -913,7 +923,7 @@
         function batSuKienThayDoi(loai) {
             const tinhId = loai === 'qq' ? '#qqTinh' : '#noTinh'; const xaId = loai === 'qq' ? '#qqXa' : '#noXa'; const hiddenId = loai === 'qq' ? 'queQuan' : 'noiO';
             $(tinhId).on('change', function() {
-                const selectedTinh = $(this).val(); const xaSelect = $(xaId);
+                const selectedTinh = $(this).val(); const xaSelect =$(xaId);
                 xaSelect.empty().append('<option value="">-- Chọn Xã/Phường/Đặc khu --</option>');
                 if (selectedTinh && diaGioiData[selectedTinh]) {
                     xaSelect.prop('disabled', false); 
@@ -925,7 +935,7 @@
         }
 
         function capNhatInputAn(tinhId, xaId, hiddenId) {
-            const tinhVal = $(tinhId).val(); const xaVal = $(xaId).val(); const hiddenInput = document.getElementById(hiddenId);
+            const tinhVal = $(tinhId).val(); const xaVal =$(xaId).val(); const hiddenInput = document.getElementById(hiddenId);
             if (tinhVal && xaVal) { hiddenInput.value = xaVal + ', ' + tinhVal; } else { hiddenInput.value = ""; }
             if(typeof kiemTraDieuKienHoanThanh === 'function') { kiemTraDieuKienHoanThanh(); }
         }
